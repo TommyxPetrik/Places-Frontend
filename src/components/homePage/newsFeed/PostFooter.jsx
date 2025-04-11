@@ -1,6 +1,6 @@
 import React from "react";
 
-const PostFooter = () => {
+const PostFooter = ({ upvotes }) => {
   return (
     <div className="card-footer bg-transparent border-0 p-0 mt-0">
       <div className="d-flex justify-content-between align-items-center mt-2">
@@ -14,7 +14,7 @@ const PostFooter = () => {
               paddingRight: "0.5rem",
             }}
           >
-            69
+            {upvotes}
           </div>
           <button className="btn btn-outline-secondary">
             <i

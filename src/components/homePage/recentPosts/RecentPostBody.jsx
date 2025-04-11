@@ -1,6 +1,6 @@
 import React from "react";
 
-const RecentPostBody = ({ subplace, questiontitle, username }) => {
+const RecentPostBody = ({ subplace, questiontitle, username, time }) => {
   return (
     <>
       <div className="card-header p-0">{subplace}</div>
@@ -11,7 +11,7 @@ const RecentPostBody = ({ subplace, questiontitle, username }) => {
         >
           <p>{questiontitle}</p>
           <footer className="blockquote-footer">
-            <cite title="Source Title">{username}</cite>
+            <cite title="Source Title">{username + " - " + time}</cite>
           </footer>
         </blockquote>
       </div>

@@ -1,12 +1,14 @@
 import React from "react";
 import PostBody from "./PostBody";
 
-const Newsfeed = ({
+const Post = ({
   subplace,
   username,
   time,
   questiontitle,
   questionbody,
+  tags,
+  upvotes,
 }) => {
   // const [showComments, setshowComments] = useState(false);
 
@@ -35,10 +37,12 @@ const Newsfeed = ({
           time={time}
           questiontitle={questiontitle}
           questionbody={questionbody}
+          tags={tags}
+          upvotes={upvotes}
         />
       </div>
     </>
   );
 };
 
-export default Newsfeed;
+export default Post;

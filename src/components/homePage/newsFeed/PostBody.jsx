@@ -8,6 +8,8 @@ const PostBody = ({
   time,
   questiontitle,
   questionbody,
+  tags,
+  upvotes,
 }) => {
   return (
     <div className="card-body d-flex flex-column" style={{ height: "100%" }}>
@@ -17,8 +19,9 @@ const PostBody = ({
         time={time}
         questiontitle={questiontitle}
         questionbody={questionbody}
+        tags={tags}
       />
-      <PostFooter />
+      <PostFooter upvotes={upvotes} />
     </div>
   );
 };

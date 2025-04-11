@@ -1,4 +1,5 @@
 import React from "react";
+import PostTags from "./PostTags";
 
 const PostBodyText = ({
   subplace,
@@ -6,6 +7,7 @@ const PostBodyText = ({
   time,
   questiontitle,
   questionbody,
+  tags,
 }) => {
   return (
     <>
@@ -26,6 +28,12 @@ const PostBodyText = ({
           style={{ marginLeft: "0.5rem" }}
         >
           {time}
+        </span>
+        <span
+          className="gap-2 d-flex align-items-center justify-content-start flex-grow-1"
+          style={{ marginLeft: "1rem" }}
+        >
+          <PostTags tags={tags} />
         </span>
       </div>
 
