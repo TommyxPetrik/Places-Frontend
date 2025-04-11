@@ -1,22 +1,22 @@
 import React from "react";
 
-function RecentPostBody() {
+const RecentPostBody = ({ subplace, questiontitle, username }) => {
   return (
     <>
-      <div className="card-header">s/Subplace</div>
+      <div className="card-header p-0">{subplace}</div>
       <div className="card-body p-0">
         <blockquote
           className="blockquote mb-0"
-          style={{ fontSize: "1rem", padding: "0.5rem" }}
+          style={{ fontSize: "1rem", padding: "0rem" }}
         >
-          <p>A well-known quote, contained in a blockquote element.</p>
+          <p>{questiontitle}</p>
           <footer className="blockquote-footer">
-            Someone famous in <cite title="Source Title">Source Title</cite>
+            <cite title="Source Title">{username}</cite>
           </footer>
         </blockquote>
       </div>
     </>
   );
-}
+};
 
 export default RecentPostBody;

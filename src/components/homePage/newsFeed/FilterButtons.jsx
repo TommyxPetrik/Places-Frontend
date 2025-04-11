@@ -1,6 +1,6 @@
 import React from "react";
 
-function FilterButtons() {
+const FilterButtons = () => {
   return (
     <>
       <div>
@@ -11,6 +11,6 @@ function FilterButtons() {
       </div>
     </>
   );
-}
+};
 
 export default FilterButtons;

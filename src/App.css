@@ -68,12 +68,12 @@ body {
 }
 
 .custom-button:hover {
-  outline: 1px solid rgba(255, 255, 255, 0.442);
+  background-color: rgb(43, 48, 53);
   transition: all 0.2s ease-in-out;
 }
 
 .custom-button {
-  outline: #181c1f;
+  background-color: rgba(33, 37, 41, 1);
 }
 
 .scroll-container {

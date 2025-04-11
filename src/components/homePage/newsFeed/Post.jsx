@@ -1,7 +1,15 @@
 import React from "react";
 import PostBody from "./PostBody";
 
-function Newsfeed() {
+const Newsfeed = ({
+  subplace,
+  username,
+  time,
+  questiontitle,
+  questionbody,
+}) => {
+  // const [showComments, setshowComments] = useState(false);
+
   return (
     <>
       <div
@@ -21,10 +29,16 @@ function Newsfeed() {
           color: "white",
         }}
       >
-        <PostBody />
+        <PostBody
+          subplace={subplace}
+          username={username}
+          time={time}
+          questiontitle={questiontitle}
+          questionbody={questionbody}
+        />
       </div>
     </>
   );
-}
+};
 
 export default Newsfeed;

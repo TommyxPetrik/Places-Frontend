@@ -1,25 +1,97 @@
-import React from "react";
+import React, { use, useState, useEffect } from "react";
 import Post from "./Post";
 
-function NewsFeed() {
+const NewsFeed = () => {
   return (
     <>
       <div>
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
-        <Post />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
+        <Post
+          subplace={"subplace"}
+          username={"username"}
+          time={"time"}
+          questiontitle={"questiontitle"}
+          questionbody={"questionbody"}
+        />
       </div>
     </>
   );
-}
+};
 
 export default NewsFeed;

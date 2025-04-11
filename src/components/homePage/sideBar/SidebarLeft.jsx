@@ -1,8 +1,9 @@
 import React, { useState } from "react";
 import ListGroup from "./ListGroup";
-import ListGroupFeatured from "./ListGroupFeatured";
+import ListgroupCreateFeed from "./ListGroupCreateFeed";
+import ListgroupSubplaces from "./ListGroupSubplaces";
 
-function Sidebar() {
+const Sidebar = () => {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
@@ -12,13 +13,13 @@ function Sidebar() {
   return (
     <>
       <button
-        className="btn btn-outline-dark position-fixed"
+        className="btn position-fixed"
         type="button"
         onClick={toggleSidebar}
         style={{
           backgroundColor: "rgb(24, 28, 31)",
           top: "5rem",
-          left: isOpen ? "14.5rem" : "0.5rem",
+          left: isOpen ? "13.7rem" : "0.5rem",
           zIndex: 1051,
           borderColor: "#444",
         }}
@@ -34,7 +35,7 @@ function Sidebar() {
         style={{
           backgroundColor: "rgb(24, 28, 31)",
           color: "white",
-          width: "16rem",
+          width: "15rem",
           visibility: isOpen ? "visible" : "hidden",
           zIndex: 1045,
           transition: "transform 0.3s ease-in-out",
@@ -44,29 +45,32 @@ function Sidebar() {
           bottom: 0,
         }}
       >
-        <div className="offcanvas-header">
-          <h5 className="offcanvas-title">Sidebar</h5>
-        </div>
         <div className="offcanvas-body scroll-container">
           <div className="d-flex flex-column align-items-start mb-3">
-            <ListGroup />
+            <ListGroup
+              first={"Home"}
+              second={"Popular"}
+              third={"Explore"}
+              fourth={"All"}
+            />
           </div>
           <div className="d-flex flex-column align-items-start mb-3">
-            <ListGroupFeatured />
+            <ListgroupCreateFeed
+              section={"Custom Feeds"}
+              first={"Create post"}
+            />
           </div>
           <div className="d-flex flex-column align-items-start mb-3">
-            <ListGroupFeatured />
-          </div>
-          <div className="d-flex flex-column align-items-start mb-3">
-            <ListGroupFeatured />
-          </div>
-          <div className="d-flex flex-column align-items-start mb-3">
-            <ListGroupFeatured />
+            <ListgroupSubplaces
+              section={"Subplaces"}
+              first={"Create subplace"}
+              subplace={"Subplace 1"}
+            />
           </div>
         </div>
       </div>
     </>
   );
-}
+};
 
 export default Sidebar;
