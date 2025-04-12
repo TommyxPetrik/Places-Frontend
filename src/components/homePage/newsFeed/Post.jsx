@@ -9,9 +9,8 @@ const Post = ({
   questionbody,
   tags,
   upvotes,
+  onClick,
 }) => {
-  // const [showComments, setshowComments] = useState(false);
-
   return (
     <>
       <div
@@ -39,6 +38,7 @@ const Post = ({
           questionbody={questionbody}
           tags={tags}
           upvotes={upvotes}
+          onClick={onClick}
         />
       </div>
     </>

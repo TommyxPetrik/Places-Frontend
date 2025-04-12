@@ -4,11 +4,20 @@ import SidebarLeft from "../components/homePage/sideBar/SidebarLeft";
 import RecentPostsAll from "../components/homePage/recentPosts/RecentPostsAll";
 import NewsFeed from "../components/homePage/newsFeed/NewsFeed";
 
-const Homepage = () => {
+const Homepage = ({
+  onPostSelect,
+  cachedPosts,
+  setCachedposts,
+  cachedSubplaces,
+  setcachedSubplaces,
+}) => {
   return (
     <>
       <Navbar />
-      <SidebarLeft />
+      <SidebarLeft
+        cachedSubplaces={cachedSubplaces}
+        setcachedSubplaces={setcachedSubplaces}
+      />
       <div
         style={{
           display: "flex",
@@ -19,7 +28,11 @@ const Homepage = () => {
         }}
       >
         <div>
-          <NewsFeed />
+          <NewsFeed
+            onPostSelect={onPostSelect}
+            cachedPosts={cachedPosts}
+            setCachedposts={setCachedposts}
+          />
         </div>
         <div style={{ display: "flex", flexDirection: "column", flex: "1" }}>
           <RecentPostsAll />

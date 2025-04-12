@@ -10,18 +10,27 @@ const PostBody = ({
   questionbody,
   tags,
   upvotes,
+  onClick,
 }) => {
   return (
-    <div className="card-body d-flex flex-column" style={{ height: "100%" }}>
-      <PostBodyText
-        subplace={subplace}
-        username={username}
-        time={time}
-        questiontitle={questiontitle}
-        questionbody={questionbody}
-        tags={tags}
-      />
-      <PostFooter upvotes={upvotes} />
+    <div>
+      <div
+        onClick={onClick}
+        className="card-body d-flex flex-column"
+        style={{ height: "100%", cursor: "pointer" }}
+      >
+        <PostBodyText
+          subplace={subplace}
+          username={username}
+          time={time}
+          questiontitle={questiontitle}
+          questionbody={questionbody}
+          tags={tags}
+        />
+      </div>
+      <div>
+        <PostFooter upvotes={upvotes} />
+      </div>
     </div>
   );
 };

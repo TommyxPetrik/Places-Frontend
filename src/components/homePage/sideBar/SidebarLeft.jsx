@@ -2,29 +2,32 @@ import React, { use, useState, useEffect } from "react";
 import SideBarButton from "./SideBarButton";
 import SideBarBody from "./SideBarBody";
 
-const Sidebar = () => {
+const Sidebar = ({ cachedSubplaces, setcachedSubplaces }) => {
   const [isOpen, setIsOpen] = useState(true);
 
   const toggleSidebar = () => {
     setIsOpen(!isOpen);
   };
 
-  const [posts, setPosts] = useState([]);
+  const [posts, setPosts] = useState(cachedSubplaces || []);
 
   useEffect(() => {
-    const fetchPosts = async () => {
-      try {
-        const response = await fetch(
-          "http://localhost:3000/public/getSubplacesFeed"
-        );
-        const data = await response.json();
-        setPosts(data);
-      } catch (error) {
-        alert("Error fetching posts:", error.mesage);
-      }
-    };
-    fetchPosts();
-  }, []);
+    if (!cachedSubplaces) {
+      const fetchPosts = async () => {
+        try {
+          const response = await fetch(
+            "http://localhost:3000/public/getSubplacesFeed"
+          );
+          const data = await response.json();
+          setPosts(data);
+          setcachedSubplaces(data);
+        } catch (error) {
+          console.error("Error fetching posts:", error.mesage);
+        }
+      };
+      fetchPosts();
+    }
+  }, [cachedSubplaces, setcachedSubplaces]);
 
   return (
     <>

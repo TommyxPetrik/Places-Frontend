@@ -28,7 +28,7 @@ const ListGroup = ({ section, first, subplaces }) => {
                 <li
                   key={subplace._id}
                   className="list-group-item text-white border-0 mb-1 custom-button d-flex align-items-center"
-                  style={{ marginLeft: "0.8rem" }}
+                  style={{ marginLeft: "0.1rem" }}
                 >
                   <i
                     className="bi bi-geo-alt-fill"
