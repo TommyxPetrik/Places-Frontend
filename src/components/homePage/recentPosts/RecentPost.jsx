@@ -1,7 +1,7 @@
 import React from "react";
 import RecentPostBody from "./RecentPostBody";
 
-const RecentPosts = ({ subplace, questiontitle, username, time }) => {
+const RecentPosts = ({ subplace, questiontitle, username, time, onClick }) => {
   return (
     <>
       <div
@@ -13,6 +13,7 @@ const RecentPosts = ({ subplace, questiontitle, username, time }) => {
           questiontitle={questiontitle}
           username={username}
           time={time}
+          onClick={onClick}
         />
       </div>
     </>

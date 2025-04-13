@@ -1,6 +1,6 @@
 import React from "react";
 
-const PostFooter = ({ upvotes, onClick }) => {
+const AnswerFooter = ({ upvotes, onClick }) => {
   return (
     <div className="card-footer bg-transparent border-0 p-0 mt-0">
       <div className="d-flex justify-content-between align-items-center mt-2">
@@ -46,4 +46,4 @@ const PostFooter = ({ upvotes, onClick }) => {
   );
 };
 
-export default PostFooter;
+export default AnswerFooter;

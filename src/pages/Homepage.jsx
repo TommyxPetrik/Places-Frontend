@@ -3,14 +3,13 @@ import Navbar from "../components/homePage/navbar/Navbar";
 import SidebarLeft from "../components/homePage/sideBar/SidebarLeft";
 import RecentPostsAll from "../components/homePage/recentPosts/RecentPostsAll";
 import NewsFeed from "../components/homePage/newsFeed/NewsFeed";
+import Postpage from "../pages/PostPage";
 
-const Homepage = ({
-  onPostSelect,
-  cachedPosts,
-  setCachedposts,
-  cachedSubplaces,
-  setcachedSubplaces,
-}) => {
+const Homepage = () => {
+  const [selectedPostId, setSelectedPostId] = useState(null);
+  const [cachedPosts, setCachedposts] = useState(null);
+  const [cachedSubplaces, setcachedSubplaces] = useState(null);
+
   return (
     <>
       <Navbar />
@@ -18,26 +17,46 @@ const Homepage = ({
         cachedSubplaces={cachedSubplaces}
         setcachedSubplaces={setcachedSubplaces}
       />
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "center",
-          alignItems: "flex-start",
-          gap: "2rem",
-          padding: "2rem",
-        }}
-      >
-        <div>
-          <NewsFeed
-            onPostSelect={onPostSelect}
-            cachedPosts={cachedPosts}
-            setCachedposts={setCachedposts}
-          />
+      {selectedPostId ? (
+        <div className="container mt-4">
+          <div className="row justify-content-center">
+            <div className="col-lg-10">
+              <Postpage
+                postId={selectedPostId}
+                onBack={() => setSelectedPostId(null)}
+                cachedSubplaces={cachedSubplaces}
+                setcachedSubplaces={setcachedSubplaces}
+              />
+            </div>
+            <div className="col-lg-2">
+              <RecentPostsAll
+                onPostSelect={setSelectedPostId}
+                cachedPosts={cachedPosts}
+                setCachedposts={setCachedposts}
+              />
+            </div>
+          </div>
         </div>
-        <div style={{ display: "flex", flexDirection: "column", flex: "1" }}>
-          <RecentPostsAll />
+      ) : (
+        <div className="container mt-4">
+          <div className="row justify-content-center">
+            <div className="col-lg-10">
+              <NewsFeed
+                onPostSelect={setSelectedPostId}
+                cachedPosts={cachedPosts}
+                setCachedposts={setCachedposts}
+              />
+            </div>
+            <div className="col-lg-2">
+              <RecentPostsAll
+                onPostSelect={setSelectedPostId}
+                cachedPosts={cachedPosts}
+                setCachedposts={setCachedposts}
+              />
+            </div>
+          </div>
         </div>
-      </div>
+      )}
     </>
   );
 };

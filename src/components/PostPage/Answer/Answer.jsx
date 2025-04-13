@@ -1,7 +1,7 @@
 import React from "react";
-import PostBody from "./PostBody";
+import AnswerBody from "./AnswerBody";
 
-const Post = ({
+const Answer = ({
   subplace,
   username,
   time,
@@ -29,7 +29,7 @@ const Post = ({
           color: "white",
         }}
       >
-        <PostBody
+        <AnswerBody
           subplace={subplace}
           username={username}
           time={time}
@@ -44,4 +44,4 @@ const Post = ({
   );
 };
 
-export default Post;
+export default Answer;

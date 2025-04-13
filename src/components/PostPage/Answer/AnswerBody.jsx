@@ -1,8 +1,8 @@
 import React from "react";
-import PostFooter from "./PostFooter";
-import PostBodyText from "./PostBodyText";
+import AnswerFooter from "./AnswerFooter";
+import AnswerBodyText from "./AnswerBodyText";
 
-const PostBody = ({
+const AnswerBody = ({
   subplace,
   username,
   time,
@@ -19,7 +19,7 @@ const PostBody = ({
         className="card-body d-flex flex-column"
         style={{ height: "100%", cursor: "pointer", width: "35rem" }}
       >
-        <PostBodyText
+        <AnswerBodyText
           subplace={subplace}
           username={username}
           time={time}
@@ -29,10 +29,10 @@ const PostBody = ({
         />
       </div>
       <div>
-        <PostFooter upvotes={upvotes} onClick={onClick} />
+        <AnswerFooter upvotes={upvotes} onClick={onClick} />
       </div>
     </div>
   );
 };
 
-export default PostBody;
+export default AnswerBody;
