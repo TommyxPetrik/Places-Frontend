@@ -6,7 +6,7 @@ const RecentPosts = ({ subplace, questiontitle, username, time, onClick }) => {
     <>
       <div
         className="card bg-dark text-white mb-3 card-hover p-3"
-        style={{ width: "16rem", height: "6rem" }}
+        style={{ width: "16rem", height: "6rem", cursor: "pointer" }}
       >
         <RecentPostBody
           subplace={subplace}

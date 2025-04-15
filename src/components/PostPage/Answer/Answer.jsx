@@ -1,41 +1,28 @@
 import React from "react";
 import AnswerBody from "./AnswerBody";
 
-const Answer = ({
-  subplace,
-  username,
-  time,
-  questiontitle,
-  questionbody,
-  tags,
-  upvotes,
-  onClick,
-}) => {
+const Answer = ({ subplace, body, username, upvotes, onClick, time }) => {
   return (
     <>
       <div
-        className="card card-hover"
+        className="card"
         style={{
-          minHeight: "11rem",
-          maxHeight: "30rem",
           marginTop: "2rem",
           marginLeft: "2rem",
           paddingTop: "0rem",
           paddingLeft: "1rem",
           paddingRight: "1rem",
           paddingBottom: "0rem",
-          borderRadius: "1rem",
-          backgroundColor: "#181c1f",
+          backgroundColor: "rgb(15, 15, 15)",
           color: "white",
+          border: "none",
         }}
       >
         <AnswerBody
           subplace={subplace}
           username={username}
+          body={body}
           time={time}
-          questiontitle={questiontitle}
-          questionbody={questionbody}
-          tags={tags}
           upvotes={upvotes}
           onClick={onClick}
         />
