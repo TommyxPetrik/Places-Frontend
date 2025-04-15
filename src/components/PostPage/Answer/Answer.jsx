@@ -1,7 +1,7 @@
 import React from "react";
 import AnswerBody from "./AnswerBody";
 
-const Answer = ({ subplace, body, username, upvotes, onClick, time }) => {
+const Answer = ({ body, username, upvotes, onClick, time }) => {
   return (
     <>
       <div
@@ -19,7 +19,6 @@ const Answer = ({ subplace, body, username, upvotes, onClick, time }) => {
         }}
       >
         <AnswerBody
-          subplace={subplace}
           username={username}
           body={body}
           time={time}

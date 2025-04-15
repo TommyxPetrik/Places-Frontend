@@ -63,7 +63,6 @@ const Postpage = ({ postId, onBack, cachedSubplaces, setcachedSubplaces }) => {
                     return (
                       <Answer
                         key={answer._id}
-                        subplace={post.subplace.name}
                         username={answer.username}
                         body={answer.body}
                         time={formatDistanceToNow(new Date(answer.createdAt), {

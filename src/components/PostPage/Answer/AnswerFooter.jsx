@@ -11,7 +11,7 @@ const AnswerFooter = ({ upvotes, onClick }) => {
               fontSize: "0.8rem",
               color: "cornflowerblue",
               backgroundColor: "rgb(15,15,15)",
-              marginTop: "0.2rem",
+              marginTop: "0.1rem",
             }}
           >
             {upvotes}

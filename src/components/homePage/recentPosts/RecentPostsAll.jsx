@@ -18,7 +18,7 @@ const RecentPostsAll = ({ onPostSelect, cachedPosts, setCachedposts }) => {
       const fetchPosts = async () => {
         try {
           const response = await fetch(
-            "http://localhost:3000/public/sortQuestions?order=asc&sort=createdAt&limit=10"
+            "http://localhost:3000/public/sortQuestions?order=des&sort=createdAt&limit=10"
           );
           const data = await response.json();
           setPosts(data);
