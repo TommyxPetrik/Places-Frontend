@@ -1,16 +1,15 @@
 import React from "react";
+import CreatePostPageButton from "../../createPost/CreatePostButton";
+import { Link } from "react-router-dom";
+import BellButton from "./BellButton";
+import ProfileButton from "./ProfileButton";
 
-const NavbarIcons = ({ onClick }) => {
+const NavbarIcons = ({}) => {
   return (
     <div className="d-flex gap-2">
-      <button
-        onClick={onClick}
-        className="btn btn-outline-secondary text-white"
-      >
-        Create
-      </button>
-      <button className="btn btn-outline-secondary">🔔</button>
-      <button className="btn btn-outline-dark">👤</button>
+      <CreatePostPageButton />
+      <BellButton />
+      <ProfileButton />
     </div>
   );
 };

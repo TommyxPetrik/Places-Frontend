@@ -1,45 +1,20 @@
 import React from "react";
+import PostUpvotes from "./PostUpvotes";
+import PostUpvoteButton from "./PostUpvoteButton";
+import PostDownvoteButton from "./PostDownvoteButton";
+import PostCommentsButton from "./PostCommentsButton";
+import PostShareButton from "./PostShareButton";
 
-const PostFooter = ({ upvotes, onClick }) => {
+const PostFooter = ({ upvotes }) => {
   return (
     <div className="card-footer bg-transparent border-0 p-0 mt-0">
       <div className="d-flex justify-content-between align-items-center mt-2">
         <div className="d-flex gap-2">
-          <div
-            className="btn-upvotes"
-            style={{
-              fontSize: "1rem",
-              color: "cornflowerblue",
-              paddingLeft: "0.5rem",
-              paddingRight: "0.5rem",
-            }}
-          >
-            {upvotes}
-          </div>
-          <button className="btn btn-outline-secondary">
-            <i
-              className="bi bi-arrow-up"
-              style={{ fontSize: "1rem", color: "cornflowerblue" }}
-            ></i>
-          </button>
-          <button className="btn btn-outline-secondary">
-            <i
-              className="bi bi-arrow-down"
-              style={{ fontSize: "1rem", color: "cornflowerblue" }}
-            ></i>
-          </button>
-          <button onClick={onClick} className="btn btn-outline-secondary">
-            <i
-              className="bi bi-chat"
-              style={{ fontSize: "1rem", color: "cornflowerblue" }}
-            ></i>
-          </button>
-          <button className="btn btn-outline-secondary">
-            <i
-              className="bi bi-share"
-              style={{ fontSize: "1rem", color: "cornflowerblue" }}
-            ></i>
-          </button>
+          <PostUpvotes upvotes={upvotes} />
+          <PostUpvoteButton />
+          <PostDownvoteButton />
+          <PostCommentsButton />
+          <PostShareButton />
         </div>
       </div>
     </div>

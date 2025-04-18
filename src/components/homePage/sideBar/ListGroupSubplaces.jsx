@@ -1,4 +1,6 @@
 import React from "react";
+import CreateSubplaceButton from "./CreateSubplaceButton";
+import { fi } from "date-fns/locale";
 
 const ListGroup = ({ section, first, subplaces }) => {
   return (
@@ -14,30 +16,28 @@ const ListGroup = ({ section, first, subplaces }) => {
           {section}
         </div>
         <ul className="list-group list-group-flush">
-          <li className="list-group-item text-white border-0 mb-1 custom-button">
-            <i
-              className="bi bi-plus"
-              style={{ fontSize: "1rem", color: "cornflowerblue" }}
-            ></i>
-            <span style={{ marginLeft: "0.1rem" }}>{first}</span>
-          </li>
+          <CreateSubplaceButton first={first} />
 
           <div>
             {subplaces.map((subplace) => {
               return (
-                <li
-                  key={subplace._id}
-                  className="list-group-item text-white border-0 mb-1 custom-button d-flex align-items-center"
-                  style={{ marginLeft: "0.1rem" }}
-                >
-                  <i
-                    className="bi bi-geo-alt-fill"
-                    style={{
-                      color: "cornflowerblue",
-                    }}
-                  ></i>
-                  <span style={{ marginLeft: "0.5rem" }}> {subplace.name}</span>
-                </li>
+                <div key={subplace._id} style={{ cursor: "pointer" }}>
+                  <li
+                    className="list-group-item text-white border-0 mb-1 custom-button d-flex align-items-center"
+                    style={{ marginLeft: "0.1rem" }}
+                  >
+                    <i
+                      className="bi bi-geo-alt-fill"
+                      style={{
+                        color: "cornflowerblue",
+                      }}
+                    ></i>
+                    <span style={{ marginLeft: "0.5rem" }}>
+                      {" "}
+                      {subplace.name}
+                    </span>
+                  </li>
+                </div>
               );
             })}
           </div>

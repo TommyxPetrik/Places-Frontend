@@ -30,6 +30,15 @@ const AnswerFooter = ({ upvotes, onClick }) => {
           </button>
           <button className="btn p-1">
             <i
+              className="bi bi-chat"
+              style={{ fontSize: "0.8rem", color: "cornflowerblue" }}
+            >
+              {" "}
+              Reply
+            </i>
+          </button>
+          <button className="btn p-1">
+            <i
               className="bi bi-share"
               style={{ fontSize: "0.8rem", color: "cornflowerblue" }}
             ></i>

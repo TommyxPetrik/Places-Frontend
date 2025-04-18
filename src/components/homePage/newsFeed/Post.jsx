@@ -9,7 +9,7 @@ const Post = ({
   questionbody,
   tags,
   upvotes,
-  onClick,
+  postId,
 }) => {
   return (
     <>
@@ -18,7 +18,7 @@ const Post = ({
         style={{
           minHeight: "11rem",
           maxHeight: "30rem",
-          marginTop: "2rem",
+          marginTop: "3rem",
           marginLeft: "2rem",
           paddingTop: "0rem",
           paddingLeft: "1rem",
@@ -37,7 +37,7 @@ const Post = ({
           questionbody={questionbody}
           tags={tags}
           upvotes={upvotes}
-          onClick={onClick}
+          postId={postId}
         />
       </div>
     </>

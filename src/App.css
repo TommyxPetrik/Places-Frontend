@@ -85,3 +85,8 @@ body {
 .scroll-container:hover {
   overflow: auto;
 }
+
+.white-placeholder::placeholder {
+  color: white;
+  opacity: 0.5;
+}

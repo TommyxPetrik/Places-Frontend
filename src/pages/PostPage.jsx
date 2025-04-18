@@ -4,10 +4,16 @@ import { is } from "date-fns/locale";
 import PostBackButton from "../components/PostPage/PostBackButton";
 import { formatDistanceToNow } from "date-fns";
 import Answer from "../components/PostPage/Answer/Answer";
+import AnswerTree from "../components/PostPage/Answer/AnswerTree";
+import CreateAnswer from "../components/PostPage/Answer/CreateAnswer";
+import { useParams } from "react-router-dom";
 
-const Postpage = ({ postId, onBack, cachedSubplaces, setcachedSubplaces }) => {
+const Postpage = () => {
   const [post, setPost] = useState([]);
   const [loading, setLoading] = useState(true);
+  const [answerTree, setAnswerTree] = useState([]);
+
+  const { postId } = useParams();
 
   useEffect(() => {
     const fetchPosts = async () => {
@@ -20,6 +26,14 @@ const Postpage = ({ postId, onBack, cachedSubplaces, setcachedSubplaces }) => {
         );
         const data = await response.json();
         setPost(data);
+        const response2 = await fetch(
+          `http://localhost:3000/answers/getAnswerTree/${postId}`,
+          {
+            method: "GET",
+          }
+        );
+        const answerTree = await response2.json();
+        setAnswerTree(answerTree);
       } catch (error) {
         console.error("Error fetching posts:", error.mesage);
       } finally {
@@ -56,22 +70,21 @@ const Postpage = ({ postId, onBack, cachedSubplaces, setcachedSubplaces }) => {
                   answers={post.answers}
                 />
                 <div className="" style={{ display: "flex" }}>
-                  <PostBackButton onBack={onBack} />
+                  <PostBackButton />
+                </div>
+                <div
+                  className=""
+                  style={{
+                    marginTop: "1rem",
+                    marginLeft: "2rem",
+                  }}
+                >
+                  <CreateAnswer />
                 </div>
                 <div className="col-lg-6">
-                  {post.answers.map((answer) => {
-                    return (
-                      <Answer
-                        key={answer._id}
-                        username={answer.username}
-                        body={answer.body}
-                        time={formatDistanceToNow(new Date(answer.createdAt), {
-                          addSuffix: true,
-                        })}
-                        upvotes={answer.upvotes}
-                      />
-                    );
-                  })}
+                  {answerTree.map((answer) => (
+                    <AnswerTree key={answer._id} answer={answer} />
+                  ))}
                 </div>
               </div>
             )

@@ -1,9 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const PostBackButton = ({ onBack }) => {
+const PostBackButton = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/`);
+  };
   return (
     <button
-      onClick={onBack}
+      onClick={handleClick}
       className="btn position-fixed"
       type="button"
       style={{

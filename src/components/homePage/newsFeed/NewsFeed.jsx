@@ -2,13 +2,10 @@ import React, { use, useState, useEffect } from "react";
 import Post from "./Post";
 import { formatDistanceToNow } from "date-fns";
 
-const NewsFeed = ({ onPostSelect, cachedPosts, setCachedposts }) => {
+const NewsFeed = ({ onPostSelect }) => {
+  const [cachedPosts, setCachedposts] = useState(null);
   const [posts, setPosts] = useState(cachedPosts || []);
   const [loading, setLoading] = useState(true);
-
-  const handlePostClick = (postId) => {
-    onPostSelect(postId);
-  };
 
   useEffect(() => {
     if (cachedPosts) {
@@ -46,9 +43,7 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedposts }) => {
                 return (
                   <Post
                     key={post._id}
-                    onClick={() => {
-                      handlePostClick(post._id);
-                    }}
+                    postId={post._id}
                     subplace={post.subplace?.name}
                     username={post.userid?.name}
                     time={formatDistanceToNow(new Date(post.createdAt), {

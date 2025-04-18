@@ -2,13 +2,10 @@ import React, { useState, useEffect, use } from "react";
 import RecentPost from "./RecentPost";
 import { formatDistanceToNow } from "date-fns";
 
-const RecentPostsAll = ({ onPostSelect, cachedPosts, setCachedposts }) => {
-  const [posts, setPosts] = useState(cachedPosts, []);
+const RecentPostsAll = () => {
   const [loading, setLoading] = useState(true);
-
-  const handlePostClick = (postId) => {
-    onPostSelect(postId);
-  };
+  const [cachedPosts, setCachedposts] = useState(null);
+  const [posts, setPosts] = useState(cachedPosts, []);
 
   useEffect(() => {
     if (cachedPosts) {
@@ -66,9 +63,7 @@ const RecentPostsAll = ({ onPostSelect, cachedPosts, setCachedposts }) => {
                   return (
                     <RecentPost
                       key={post._id}
-                      onClick={() => {
-                        handlePostClick(post._id);
-                      }}
+                      postId={post._id}
                       subplace={post.subplace.name}
                       username={post.userid.name}
                       questiontitle={post.title}

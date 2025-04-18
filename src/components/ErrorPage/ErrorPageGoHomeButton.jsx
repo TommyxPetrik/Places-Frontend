@@ -1,10 +1,10 @@
 import { useNavigate } from "react-router-dom";
 
-const CreatePostPageButton = () => {
+const ErrorPageGoHomeButton = () => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate("/create");
+    navigate("/");
   };
 
   return (
@@ -12,9 +12,9 @@ const CreatePostPageButton = () => {
       className="btn btn-outline-secondary text-white"
       onClick={handleClick}
     >
-      Create
+      Go home
     </button>
   );
 };
 
-export default CreatePostPageButton;
+export default ErrorPageGoHomeButton;

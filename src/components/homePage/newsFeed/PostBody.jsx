@@ -1,6 +1,7 @@
 import React from "react";
 import PostFooter from "./PostFooter";
 import PostBodyText from "./PostBodyText";
+import { useNavigate } from "react-router-dom";
 
 const PostBody = ({
   subplace,
@@ -10,12 +11,17 @@ const PostBody = ({
   questionbody,
   tags,
   upvotes,
-  onClick,
+  postId,
 }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/post/${postId}`);
+  };
   return (
     <div>
       <div
-        onClick={onClick}
+        onClick={handleClick}
         className="card-body d-flex flex-column"
         style={{ height: "100%", cursor: "pointer", width: "35rem" }}
       >
@@ -29,7 +35,7 @@ const PostBody = ({
         />
       </div>
       <div>
-        <PostFooter upvotes={upvotes} onClick={onClick} />
+        <PostFooter upvotes={upvotes} />
       </div>
     </div>
   );

@@ -8,7 +8,7 @@ const Navbar = ({ onClick }) => {
     <header className="navbar bg-dark p-1 d-flex justify-content-between align-items-center fixed-top">
       <NavbarLogo />
       <NavbarSearchBar />
-      <NavbarIcons onClick={onClick} />
+      <NavbarIcons />
     </header>
   );
 };
