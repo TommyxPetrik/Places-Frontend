@@ -3,7 +3,7 @@ import SelectSubplace from "../createPost/SelectSubplace";
 import Questiontitle from "../createPost/QuestionTitle";
 import QuestionBody from "../createPost/QuestionBody";
 import SelectTags from "../createPost/SelectTags";
-import CreatePostPageButton from "../createPost/CreatePostButton";
+import CreatePostPageButton from "../createPost/CreatePostPageButton";
 
 const CreatePost = () => {
   const [selectedTag, setSelectedTag] = useState("");
@@ -82,7 +82,7 @@ const CreatePost = () => {
           handleSelectChange={handleSelectChange}
           handleRemoveTag={handleRemoveTag}
         />
-        <CreatePostPageButton handleCreatePost={handleCreatePost}/>
+        <CreatePostPageButton handleCreatePost={handleCreatePost} />
       </div>
     </>
   );

@@ -9,7 +9,7 @@ const CreatePostPageButton = () => {
 
   return (
     <button
-      className="btn btn-outline-secondary text-white"
+      className="btn btn-outline-secondary text-white mt-2"
       onClick={handleClick}
     >
       Create

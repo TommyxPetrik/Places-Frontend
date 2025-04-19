@@ -1,9 +1,15 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
-const PostCommentsButton = () => {
+const PostCommentsButton = ({ postId }) => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate(`/post/${postId}`);
+  };
   return (
     <>
-      <button className="btn btn-outline-secondary">
+      <button onClick={handleClick} className="btn btn-outline-secondary">
         <i
           className="bi bi-chat"
           style={{ fontSize: "1rem", color: "cornflowerblue" }}

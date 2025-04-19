@@ -1,7 +1,7 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const CommentButton = () => {
+const CancelAnswerButton = ({ onClick }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
@@ -10,13 +10,14 @@ const CommentButton = () => {
   return (
     <>
       <button
-        className="btn btn-outline-secondary text-white bg-primary"
+        className="btn btn-outline-secondary text-white"
         // onClick={handleClick}
+        onClick={onClick}
       >
-        Create
+        Cancel
       </button>
     </>
   );
 };
 
-export default CommentButton;
+export default CancelAnswerButton;

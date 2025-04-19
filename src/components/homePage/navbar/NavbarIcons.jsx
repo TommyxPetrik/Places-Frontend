@@ -1,5 +1,5 @@
 import React from "react";
-import CreatePostPageButton from "../../createPost/CreatePostButton";
+import CreatePostPageButton from "../../createPost/CreatePostPageButton";
 import { Link } from "react-router-dom";
 import BellButton from "./BellButton";
 import ProfileButton from "./ProfileButton";

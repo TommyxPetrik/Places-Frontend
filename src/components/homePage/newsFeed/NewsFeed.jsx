@@ -29,6 +29,15 @@ const NewsFeed = ({ onPostSelect }) => {
     }
   }, [cachedPosts, setCachedposts]);
 
+  const handlePostUpdate = (updatedPost) => {
+    setPosts((prevPosts) =>
+      prevPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
+    );
+    setCachedposts((prevPosts) =>
+      prevPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
+    );
+  };
+
   return (
     <>
       <div>
@@ -53,6 +62,7 @@ const NewsFeed = ({ onPostSelect }) => {
                     questiontitle={post.title}
                     questionbody={post.body}
                     upvotes={post.upvotes}
+                    onPostUpdated={handlePostUpdate}
                   />
                 );
               })}

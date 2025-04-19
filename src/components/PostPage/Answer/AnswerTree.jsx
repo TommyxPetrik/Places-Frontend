@@ -2,7 +2,7 @@ import React from "react";
 import Answer from "./Answer";
 import { formatDistanceToNow } from "date-fns";
 
-const AnswerTree = ({ answer }) => {
+const AnswerTree = ({ answer, answerId, onAnswerCreated }) => {
   if (!answer) {
     console.warn("Answer is undefined!");
     return null;
@@ -12,6 +12,7 @@ const AnswerTree = ({ answer }) => {
     <div className="mb-3 ms-3">
       <Answer
         key={answer._id}
+        answerId={answer._id}
         username={answer.username}
         body={answer.body}
         time={
@@ -22,11 +23,16 @@ const AnswerTree = ({ answer }) => {
             : "unknown time"
         }
         upvotes={answer.upvotes}
+        onAnswerCreated={onAnswerCreated}
       />
       {answer.children && answer.children.length > 0 && (
         <div className="ms-4 border-start ps-3">
           {answer.children.map((child) => (
-            <AnswerTree key={child._id} answer={child} />
+            <AnswerTree
+              key={child._id}
+              answer={child}
+              onAnswerCreated={onAnswerCreated}
+            />
           ))}
         </div>
       )}

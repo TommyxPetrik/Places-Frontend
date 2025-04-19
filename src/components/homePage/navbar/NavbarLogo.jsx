@@ -1,8 +1,18 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 
 const NavbarLogo = () => {
+  const navigate = useNavigate();
+
+  const handleClick = () => {
+    navigate("/");
+  };
   return (
-    <div className="d-flex align-items-center gap-2">
+    <div
+      onClick={handleClick}
+      className="d-flex align-items-center gap-2"
+      style={{ cursor: "pointer" }}
+    >
       <i
         className="bi bi-geo-alt-fill"
         style={{

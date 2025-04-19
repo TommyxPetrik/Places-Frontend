@@ -1,14 +1,22 @@
 import React from "react";
 import AnswerBody from "./AnswerBody";
 
-const Answer = ({ body, username, upvotes, onClick, time }) => {
+const Answer = ({
+  body,
+  username,
+  upvotes,
+  onClick,
+  time,
+  answerId,
+  onAnswerCreated,
+}) => {
   return (
     <>
       <div
         className="card"
         style={{
           marginTop: "2rem",
-          marginLeft: "2rem",
+          // marginLeft: "2rem",
           paddingTop: "0rem",
           paddingLeft: "1rem",
           paddingRight: "1rem",
@@ -20,10 +28,12 @@ const Answer = ({ body, username, upvotes, onClick, time }) => {
       >
         <AnswerBody
           username={username}
+          answerId={answerId}
           body={body}
           time={time}
           upvotes={upvotes}
           onClick={onClick}
+          onAnswerCreated={onAnswerCreated}
         />
       </div>
     </>

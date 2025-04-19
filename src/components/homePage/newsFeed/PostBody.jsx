@@ -12,6 +12,7 @@ const PostBody = ({
   tags,
   upvotes,
   postId,
+  onPostUpdated,
 }) => {
   const navigate = useNavigate();
 
@@ -35,7 +36,11 @@ const PostBody = ({
         />
       </div>
       <div>
-        <PostFooter upvotes={upvotes} />
+        <PostFooter
+          upvotes={upvotes}
+          postId={postId}
+          onPostUpdated={onPostUpdated}
+        />
       </div>
     </div>
   );

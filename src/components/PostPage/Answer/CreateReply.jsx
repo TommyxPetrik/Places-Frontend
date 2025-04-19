@@ -5,20 +5,13 @@ import CreateAnswerButton from "./CreateAnswerButton";
 import CancelAnswerButton from "./CancelAnswerButton";
 import { useParams } from "react-router-dom";
 
-const CreateAnswer = ({ onAnswerCreated }) => {
+const CreateAnswer = ({ onAnswerCreated, onCancel, answerId }) => {
   const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
   const { postId } = useParams();
 
-  const handleBlur = () => {
-    if (value.trim() === "") {
-      setExpanded(false);
-    }
-  };
-
   const handleCreateAnswer = async () => {
     if (!value.trim()) return;
-
     try {
       const response = await fetch(`http://localhost:3000/answers/create`, {
         method: "POST",
@@ -28,6 +21,7 @@ const CreateAnswer = ({ onAnswerCreated }) => {
         body: JSON.stringify({
           body: value,
           question: postId,
+          parentAnswer: answerId,
         }),
       });
 
@@ -41,6 +35,9 @@ const CreateAnswer = ({ onAnswerCreated }) => {
 
       if (onAnswerCreated) {
         onAnswerCreated();
+      }
+      if (onCancel) {
+        onCancel();
       }
     } catch (error) {
       console.error("Error fetching subplace: ", error.message);
@@ -78,7 +75,7 @@ const CreateAnswer = ({ onAnswerCreated }) => {
           </div>
 
           <div className="d-flex gap-2">
-            <CancelAnswerButton onClick={handleBlur} />
+            <CancelAnswerButton onClick={onCancel} />
             <CreateAnswerButton onClick={handleCreateAnswer} />
           </div>
         </div>

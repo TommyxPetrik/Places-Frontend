@@ -10,6 +10,7 @@ const Post = ({
   tags,
   upvotes,
   postId,
+  onPostUpdated,
 }) => {
   return (
     <>
@@ -38,6 +39,7 @@ const Post = ({
           tags={tags}
           upvotes={upvotes}
           postId={postId}
+          onPostUpdated={onPostUpdated}
         />
       </div>
     </>
