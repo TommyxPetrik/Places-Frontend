@@ -13,6 +13,7 @@ const PostBody = ({
   upvotes,
   postId,
   onPostUpdated,
+  voteStatus,
 }) => {
   const navigate = useNavigate();
 
@@ -40,6 +41,7 @@ const PostBody = ({
           upvotes={upvotes}
           postId={postId}
           onPostUpdated={onPostUpdated}
+          voteStatus={voteStatus}
         />
       </div>
     </div>

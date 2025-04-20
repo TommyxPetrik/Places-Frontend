@@ -70,6 +70,8 @@ const Postpage = () => {
                   upvotes={post.upvotes}
                   answers={post.answers}
                   onPostUpdated={fetchPosts}
+                  hasUpvoted={post.hasUpvoted}
+                  hasDownvoted={post.hasDownvoted}
                 />
                 <div className="" style={{ display: "flex" }}>
                   <PostBackButton />

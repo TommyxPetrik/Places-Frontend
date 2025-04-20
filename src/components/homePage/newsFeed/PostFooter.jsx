@@ -4,8 +4,9 @@ import PostUpvoteButton from "./PostUpvoteButton";
 import PostDownvoteButton from "./PostDownvoteButton";
 import PostCommentsButton from "./PostCommentsButton";
 import PostShareButton from "./PostShareButton";
+import { useState } from "react";
 
-const PostFooter = ({ upvotes, postId, onPostUpdated }) => {
+const PostFooter = ({ upvotes, postId, onPostUpdated, voteStatus }) => {
   const handleUpvote = async () => {
     try {
       const response = await fetch(
@@ -41,8 +42,14 @@ const PostFooter = ({ upvotes, postId, onPostUpdated }) => {
       <div className="d-flex justify-content-between align-items-center mt-2">
         <div className="d-flex gap-2">
           <PostUpvotes upvotes={upvotes} />
-          <PostUpvoteButton onClick={handleUpvote} />
-          <PostDownvoteButton onClick={handleDownvote} />
+          <PostUpvoteButton
+            onClick={handleUpvote}
+            isActive={voteStatus === "upvoted"}
+          />
+          <PostDownvoteButton
+            onClick={handleDownvote}
+            isActive={voteStatus === "downvoted"}
+          />
           <PostCommentsButton postId={postId} />
           <PostShareButton />
         </div>

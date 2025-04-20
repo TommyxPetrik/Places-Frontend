@@ -6,8 +6,24 @@ const NewsFeed = ({ onPostSelect }) => {
   const [cachedPosts, setCachedposts] = useState(null);
   const [posts, setPosts] = useState(cachedPosts || []);
   const [loading, setLoading] = useState(true);
+  const [userVotes, setUserVotes] = useState({
+    upvotedQuestions: [],
+    downvotedQuestions: [],
+    upvotedAnswers: [],
+    downvotedAnswers: [],
+  });
 
   useEffect(() => {
+    const fetchVotes = async () => {
+      try {
+        const res = await fetch("http://localhost:3000/users/getUserVotes");
+        const votes = await res.json();
+        setUserVotes(votes);
+      } catch (error) {
+        console.error("Chyba pri načítaní hlasov:", error.message);
+      }
+    };
+    fetchVotes();
     if (cachedPosts) {
       setLoading(false);
     }
@@ -37,7 +53,6 @@ const NewsFeed = ({ onPostSelect }) => {
       prevPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
     );
   };
-
   return (
     <>
       <div>
@@ -49,6 +64,16 @@ const NewsFeed = ({ onPostSelect }) => {
           posts.length > 0 && (
             <div>
               {posts.map((post) => {
+                const upvotedQuestions =
+                  userVotes?.questionVotes?.upvoted || [];
+                const downvotedQuestions =
+                  userVotes?.questionVotes?.downvoted || [];
+
+                const voteStatus = upvotedQuestions.includes(post._id)
+                  ? "upvoted"
+                  : downvotedQuestions.includes(post._id)
+                  ? "downvoted"
+                  : null;
                 return (
                   <Post
                     key={post._id}
@@ -63,6 +88,7 @@ const NewsFeed = ({ onPostSelect }) => {
                     questionbody={post.body}
                     upvotes={post.upvotes}
                     onPostUpdated={handlePostUpdate}
+                    voteStatus={voteStatus}
                   />
                 );
               })}

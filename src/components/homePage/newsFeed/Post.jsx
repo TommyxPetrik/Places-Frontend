@@ -11,6 +11,7 @@ const Post = ({
   upvotes,
   postId,
   onPostUpdated,
+  voteStatus,
 }) => {
   return (
     <>
@@ -40,6 +41,7 @@ const Post = ({
           upvotes={upvotes}
           postId={postId}
           onPostUpdated={onPostUpdated}
+          voteStatus={voteStatus}
         />
       </div>
     </>
