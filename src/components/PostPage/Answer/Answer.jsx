@@ -9,6 +9,7 @@ const Answer = ({
   time,
   answerId,
   onAnswerCreated,
+  voteStatus,
 }) => {
   return (
     <>
@@ -34,6 +35,7 @@ const Answer = ({
           upvotes={upvotes}
           onClick={onClick}
           onAnswerCreated={onAnswerCreated}
+          voteStatus={voteStatus}
         />
       </div>
     </>

@@ -1,58 +1,68 @@
 import React, { use, useState, useEffect } from "react";
 import Post from "./Post";
 import { formatDistanceToNow } from "date-fns";
+import { useUserVotes } from "../../../context/UserVotesContext";
 
-const NewsFeed = ({ onPostSelect }) => {
-  const [cachedPosts, setCachedposts] = useState(null);
+const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   const [posts, setPosts] = useState(cachedPosts || []);
   const [loading, setLoading] = useState(true);
-  const [userVotes, setUserVotes] = useState({
-    upvotedQuestions: [],
-    downvotedQuestions: [],
-    upvotedAnswers: [],
-    downvotedAnswers: [],
-  });
+
+  const userVotes = useUserVotes();
 
   useEffect(() => {
-    const fetchVotes = async () => {
+    const fetchData = async () => {
+      setLoading(true);
       try {
-        const res = await fetch("http://localhost:3000/users/getUserVotes");
-        const votes = await res.json();
-        setUserVotes(votes);
+        let freshPosts = cachedPosts;
+        if (!cachedPosts) {
+          const postsRes = await fetch("http://localhost:3000/public/feed");
+          freshPosts = await postsRes.json();
+        }
+
+        const upvotedQuestions = userVotes?.questionVotes?.upvoted || [];
+        const downvotedQuestions = userVotes?.questionVotes?.downvoted || [];
+
+        const enrichedPosts = freshPosts.map((post) => ({
+          ...post,
+          voteStatus: upvotedQuestions.includes(post._id)
+            ? "upvoted"
+            : downvotedQuestions.includes(post._id)
+            ? "downvoted"
+            : null,
+        }));
+
+        setPosts(enrichedPosts);
+        setCachedPosts(enrichedPosts);
       } catch (error) {
-        console.error("Chyba pri načítaní hlasov:", error.message);
+        console.error("Error during fetching data:", error.message);
+      } finally {
+        setLoading(false);
       }
     };
-    fetchVotes();
-    if (cachedPosts) {
-      setLoading(false);
-    }
-    if (!cachedPosts) {
-      const fetchPosts = async () => {
-        try {
-          const response = await fetch("http://localhost:3000/public/feed");
-          const data = await response.json();
-          setPosts(data);
-          setCachedposts(data);
-        } catch (error) {
-          console.error("Error fetching posts:", error.mesage);
-        } finally {
-          setLoading(false);
-        }
-      };
 
-      fetchPosts();
-    }
-  }, [cachedPosts, setCachedposts]);
+    fetchData();
+  }, [cachedPosts, setCachedPosts]);
 
   const handlePostUpdate = (updatedPost) => {
-    setPosts((prevPosts) =>
-      prevPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
+    const voteStatus = userVotes?.questionVotes?.upvoted.includes(
+      updatedPost._id
+    )
+      ? "upvoted"
+      : userVotes?.questionVotes?.downvoted.includes(updatedPost._id)
+      ? "downvoted"
+      : null;
+
+    const updatedWithStatus = { ...updatedPost, voteStatus };
+
+    setPosts((prev) =>
+      prev.map((p) => (p._id === updatedPost._id ? updatedWithStatus : p))
     );
-    setCachedposts((prevPosts) =>
-      prevPosts.map((p) => (p._id === updatedPost._id ? updatedPost : p))
+
+    setCachedPosts((prev) =>
+      prev.map((p) => (p._id === updatedPost._id ? updatedWithStatus : p))
     );
   };
+
   return (
     <>
       <div>

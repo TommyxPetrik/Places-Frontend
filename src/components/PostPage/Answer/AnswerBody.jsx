@@ -10,6 +10,7 @@ const AnswerBody = ({
   onClick,
   answerId,
   onAnswerCreated,
+  voteStatus,
 }) => {
   return (
     <div>
@@ -22,6 +23,7 @@ const AnswerBody = ({
           onClick={onClick}
           answerId={answerId}
           onAnswerCreated={onAnswerCreated}
+          voteStatus={voteStatus}
         />
       </div>
     </div>

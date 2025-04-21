@@ -6,11 +6,13 @@ import { formatDistanceToNow } from "date-fns";
 import AnswerTree from "../components/PostPage/Answer/AnswerTree";
 import CreateAnswer from "../components/PostPage/Answer/CreateAnswer";
 import { useParams } from "react-router-dom";
+import { useUserVotes } from "../context/UserVotesContext";
 
 const Postpage = () => {
   const [post, setPost] = useState([]);
   const [loading, setLoading] = useState(true);
   const [answerTree, setAnswerTree] = useState([]);
+  const userVotes = useUserVotes();
 
   const { postId } = useParams();
 
@@ -22,8 +24,18 @@ const Postpage = () => {
           method: "GET",
         }
       );
+
       const data = await response.json();
-      setPost(data);
+      const upvotedQuestions = userVotes?.questionVotes?.upvoted || [];
+      const downvotedQuestions = userVotes?.questionVotes?.downvoted || [];
+      const voteStatus = upvotedQuestions.includes(data._id)
+        ? "upvoted"
+        : downvotedQuestions.includes(data._id)
+        ? "downvoted"
+        : null;
+
+      const enrichedPost = { ...data, voteStatus };
+      setPost(enrichedPost);
       const response2 = await fetch(
         `http://localhost:3000/answers/getAnswerTree/${postId}`,
         {
@@ -40,8 +52,10 @@ const Postpage = () => {
   };
 
   useEffect(() => {
-    fetchPosts();
-  }, [postId]);
+    if (userVotes) {
+      fetchPosts();
+    }
+  }, [postId, userVotes]);
 
   return (
     <>
@@ -72,6 +86,7 @@ const Postpage = () => {
                   onPostUpdated={fetchPosts}
                   hasUpvoted={post.hasUpvoted}
                   hasDownvoted={post.hasDownvoted}
+                  voteStatus={post.voteStatus}
                 />
                 <div className="" style={{ display: "flex" }}>
                   <PostBackButton />
@@ -86,13 +101,26 @@ const Postpage = () => {
                   <CreateAnswer onAnswerCreated={fetchPosts} />
                 </div>
                 <div className="col-lg-12">
-                  {answerTree.map((answer) => (
-                    <AnswerTree
-                      key={answer._id}
-                      answer={answer}
-                      onAnswerCreated={fetchPosts}
-                    />
-                  ))}
+                  {answerTree.map((answer) => {
+                    const upvotedAnswers =
+                      userVotes?.answerVotes?.upvoted || [];
+                    const downvotedAnswers =
+                      userVotes?.answerVotes?.downvoted || [];
+
+                    const voteStatus = upvotedAnswers.includes(answer._id)
+                      ? "upvoted"
+                      : downvotedAnswers.includes(answer._id)
+                      ? "downvoted"
+                      : null;
+                    return (
+                      <AnswerTree
+                        key={answer._id}
+                        answer={answer}
+                        onAnswerCreated={fetchPosts}
+                        voteStatus={voteStatus}
+                      />
+                    );
+                  })}
                 </div>
               </div>
             )

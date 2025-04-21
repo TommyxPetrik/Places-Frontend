@@ -1,9 +1,12 @@
 import React from "react";
 
-const AnswerUpvotes = () => {
+const AnswerUpvotes = ({ OnClick, isActive }) => {
   return (
     <>
-      <button className="btn p-1">
+      <button
+        onClick={OnClick}
+        className={`btn p-1 btnanswers ${isActive ? "active" : ""}`}
+      >
         <i
           className="bi bi-arrow-down"
           style={{ fontSize: "0.8rem", color: "cornflowerblue" }}
