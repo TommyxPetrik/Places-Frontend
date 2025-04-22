@@ -7,10 +7,20 @@ import NewsFeed from "./components/homePage/newsFeed/NewsFeed";
 import CreatePostPage from "./pages/CreatePostPage";
 import Postpage from "./pages/PostPage";
 import RecentPostsAll from "./components/homePage/recentPosts/RecentPostsAll";
-import { useState } from "react";
+import { useEffect, useState } from "react";
+import { useUserVotes } from "./context/UserVotesContext";
 
 function App() {
   const [cachedPosts, setCachedPosts] = useState(null);
+  const [voteStatuses, setVoteStatuses] = useState({});
+  const userVotes = useUserVotes();
+
+  const updateVoteStatus = (postId, status) => {
+    setVoteStatuses((prev) => ({
+      ...prev,
+      [postId]: status,
+    }));
+  };
 
   const router = createBrowserRouter([
     {

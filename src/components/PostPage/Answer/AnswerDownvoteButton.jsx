@@ -1,10 +1,10 @@
 import React from "react";
 
-const AnswerUpvotes = ({ OnClick, isActive }) => {
+const AnswerDownvoteButton = ({ onClick, isActive }) => {
   return (
     <>
       <button
-        onClick={OnClick}
+        onClick={onClick}
         className={`btn p-1 btnanswers ${isActive ? "active" : ""}`}
       >
         <i
@@ -16,4 +16,4 @@ const AnswerUpvotes = ({ OnClick, isActive }) => {
   );
 };
 
-export default AnswerUpvotes;
+export default AnswerDownvoteButton;

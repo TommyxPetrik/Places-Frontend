@@ -1,35 +1,52 @@
 import React, { use, useState, useEffect } from "react";
 import Post from "./Post";
 import { formatDistanceToNow } from "date-fns";
-import { useUserVotes } from "../../../context/UserVotesContext";
 
 const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   const [posts, setPosts] = useState(cachedPosts || []);
   const [loading, setLoading] = useState(true);
-
-  const userVotes = useUserVotes();
+  const [userVotes, setUserVotes] = useState();
 
   useEffect(() => {
     const fetchData = async () => {
       setLoading(true);
       try {
-        let freshPosts = cachedPosts;
+        const votesRes = await fetch(
+          "http://localhost:3000/users/getUserVotes"
+        );
+        const freshVotes = await votesRes.json();
+        setUserVotes(freshVotes);
+
+        let basePosts = cachedPosts;
+
         if (!cachedPosts) {
           const postsRes = await fetch("http://localhost:3000/public/feed");
-          freshPosts = await postsRes.json();
+          basePosts = await postsRes.json();
         }
 
-        const upvotedQuestions = userVotes?.questionVotes?.upvoted || [];
-        const downvotedQuestions = userVotes?.questionVotes?.downvoted || [];
+        const enrichedPosts = await Promise.all(
+          basePosts.map(async (cachedPost) => {
+            try {
+              const res = await fetch(
+                `http://localhost:3000/public/questions/${cachedPost._id}`
+              );
+              const freshPost = await res.json();
 
-        const enrichedPosts = freshPosts.map((post) => ({
-          ...post,
-          voteStatus: upvotedQuestions.includes(post._id)
-            ? "upvoted"
-            : downvotedQuestions.includes(post._id)
-            ? "downvoted"
-            : null,
-        }));
+              const voteStatus = freshVotes?.questionVotes?.upvoted.includes(
+                freshPost._id
+              )
+                ? "upvoted"
+                : freshVotes?.questionVotes?.downvoted.includes(freshPost._id)
+                ? "downvoted"
+                : null;
+
+              return { ...freshPost, voteStatus };
+            } catch (err) {
+              console.error("Error fetching single post", err);
+              return { ...cachedPost, voteStatus: null };
+            }
+          })
+        );
 
         setPosts(enrichedPosts);
         setCachedPosts(enrichedPosts);

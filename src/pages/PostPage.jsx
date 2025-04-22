@@ -6,25 +6,26 @@ import { formatDistanceToNow } from "date-fns";
 import AnswerTree from "../components/PostPage/Answer/AnswerTree";
 import CreateAnswer from "../components/PostPage/Answer/CreateAnswer";
 import { useParams } from "react-router-dom";
-import { useUserVotes } from "../context/UserVotesContext";
 
 const Postpage = () => {
   const [post, setPost] = useState([]);
   const [loading, setLoading] = useState(true);
   const [answerTree, setAnswerTree] = useState([]);
-  const userVotes = useUserVotes();
-
   const { postId } = useParams();
+  const [userVotes, setUserVotes] = useState();
 
   const fetchPosts = async () => {
     try {
+      const res = await fetch("http://localhost:3000/users/getUserVotes");
+      const votes = await res.json();
+      setUserVotes(votes);
+
       const response = await fetch(
         `http://localhost:3000/public/questions/${postId}`,
         {
           method: "GET",
         }
       );
-
       const data = await response.json();
       const upvotedQuestions = userVotes?.questionVotes?.upvoted || [];
       const downvotedQuestions = userVotes?.questionVotes?.downvoted || [];
@@ -52,9 +53,7 @@ const Postpage = () => {
   };
 
   useEffect(() => {
-    if (userVotes) {
-      fetchPosts();
-    }
+    fetchPosts();
   }, [postId, userVotes]);
 
   return (
@@ -84,8 +83,6 @@ const Postpage = () => {
                   upvotes={post.upvotes}
                   answers={post.answers}
                   onPostUpdated={fetchPosts}
-                  hasUpvoted={post.hasUpvoted}
-                  hasDownvoted={post.hasDownvoted}
                   voteStatus={post.voteStatus}
                 />
                 <div className="" style={{ display: "flex" }}>
@@ -106,7 +103,6 @@ const Postpage = () => {
                       userVotes?.answerVotes?.upvoted || [];
                     const downvotedAnswers =
                       userVotes?.answerVotes?.downvoted || [];
-
                     const voteStatus = upvotedAnswers.includes(answer._id)
                       ? "upvoted"
                       : downvotedAnswers.includes(answer._id)

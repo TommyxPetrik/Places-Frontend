@@ -1,23 +1,23 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import AnswerUpvotes from "./AnswerUpvotes";
-import AnswesUpvoteButton from "./AnswerUpvoteButton";
+import AnswerUpvoteButton from "./AnswerUpvoteButton";
 import AnswerDownvoteButton from "./AnswerDownvoteButton";
 import AnswerReplyButton from "./AnswerReplyButton";
 import AnswerShareButton from "./AnswerShareButton";
 import CreateReply from "./CreateReply";
-import { flushSync } from "react-dom";
 
 const AnswerFooter = ({
   upvotes,
-  onClick,
   answerId,
   onAnswerCreated,
-  voteStatus,
+  // voteStatus,
 }) => {
   const [reply, setReply] = useState(false);
 
   const handleUpvote = async () => {
     try {
+      console.log("Fungujem");
+
       const response = await fetch(
         `http://localhost:3000/answers/upvote/${answerId}`,
         {
@@ -25,7 +25,7 @@ const AnswerFooter = ({
         }
       );
       const updatedAnswer = await response.json();
-      onPostUpdated(updatedAnswer);
+      onAnswerCreated(updatedAnswer);
     } catch (error) {
       console.error("Upvote error:", error.message);
     }
@@ -40,7 +40,7 @@ const AnswerFooter = ({
         }
       );
       const updatedAnswer = await response.json();
-      onPostUpdated(updatedAnswer);
+      onAnswerCreated(updatedAnswer);
     } catch (error) {
       console.error("Downvote error:", error.message);
     }
@@ -55,13 +55,13 @@ const AnswerFooter = ({
       <div className="d-flex justify-content-between align-items-center mt-2">
         <div className="d-flex gap-2">
           <AnswerUpvotes upvotes={upvotes} />
-          <AnswesUpvoteButton
+          <AnswerUpvoteButton
             onClick={handleUpvote}
-            isActive={voteStatus === "upvoted"}
+            // isActive={voteStatus === "upvoted"}
           />
           <AnswerDownvoteButton
             onClick={handleDownvote}
-            isActive={voteStatus === "downvoted"}
+            // isActive={voteStatus === "downvoted"}
           />
           <AnswerReplyButton onClick={replyToggle} />
           <AnswerShareButton />

@@ -20,7 +20,6 @@ const AnswerBody = ({
       <div>
         <AnswerFooter
           upvotes={upvotes}
-          onClick={onClick}
           answerId={answerId}
           onAnswerCreated={onAnswerCreated}
           voteStatus={voteStatus}

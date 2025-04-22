@@ -2,7 +2,7 @@ import React from "react";
 import Answer from "./Answer";
 import { formatDistanceToNow } from "date-fns";
 
-const AnswerTree = ({ answer, answerId, voteStatus, onAnswerCreated }) => {
+const AnswerTree = ({ answer, voteStatus, onAnswerCreated }) => {
   if (!answer) {
     console.warn("Answer is undefined!");
     return null;
