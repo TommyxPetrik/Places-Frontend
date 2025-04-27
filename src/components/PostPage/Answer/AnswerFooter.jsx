@@ -6,18 +6,11 @@ import AnswerReplyButton from "./AnswerReplyButton";
 import AnswerShareButton from "./AnswerShareButton";
 import CreateReply from "./CreateReply";
 
-const AnswerFooter = ({
-  upvotes,
-  answerId,
-  onAnswerCreated,
-  // voteStatus,
-}) => {
+const AnswerFooter = ({ upvotes, answerId, onAnswerCreated, voteStatus }) => {
   const [reply, setReply] = useState(false);
 
   const handleUpvote = async () => {
     try {
-      console.log("Fungujem");
-
       const response = await fetch(
         `http://localhost:3000/answers/upvote/${answerId}`,
         {
@@ -57,11 +50,11 @@ const AnswerFooter = ({
           <AnswerUpvotes upvotes={upvotes} />
           <AnswerUpvoteButton
             onClick={handleUpvote}
-            // isActive={voteStatus === "upvoted"}
+            isActive={voteStatus === "upvoted"}
           />
           <AnswerDownvoteButton
             onClick={handleDownvote}
-            // isActive={voteStatus === "downvoted"}
+            isActive={voteStatus === "downvoted"}
           />
           <AnswerReplyButton onClick={replyToggle} />
           <AnswerShareButton />

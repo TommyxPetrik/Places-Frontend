@@ -12,15 +12,6 @@ import { useUserVotes } from "./context/UserVotesContext";
 
 function App() {
   const [cachedPosts, setCachedPosts] = useState(null);
-  const [voteStatuses, setVoteStatuses] = useState({});
-  const userVotes = useUserVotes();
-
-  const updateVoteStatus = (postId, status) => {
-    setVoteStatuses((prev) => ({
-      ...prev,
-      [postId]: status,
-    }));
-  };
 
   const router = createBrowserRouter([
     {
@@ -33,15 +24,15 @@ function App() {
         {
           index: true,
           element: (
-            <div className="container mt-4">
+            <div className="container mt-4" style={{ width: "1000px" }}>
               <div className="row justify-content-center">
-                <div className="col-lg-10">
+                <div className="col-lg-8">
                   <NewsFeed
                     cachedPosts={cachedPosts}
                     setCachedPosts={setCachedPosts}
                   />
                 </div>
-                <div className="col-lg-2">
+                <div className="col-lg-4">
                   <RecentPostsAll />
                 </div>
               </div>
@@ -55,12 +46,12 @@ function App() {
         {
           path: "post/:postId",
           element: (
-            <div className="container mt-4">
+            <div className="container mt-4" style={{ width: "1000px" }}>
               <div className="row justify-content-center">
-                <div className="col-lg-10">
+                <div className="col-lg-8">
                   <Postpage />
                 </div>
-                <div className="col-lg-2">
+                <div className="col-lg-4">
                   <RecentPostsAll />
                 </div>
               </div>

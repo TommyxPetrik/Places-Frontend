@@ -1,12 +1,34 @@
 import React from "react";
 import Answer from "./Answer";
 import { formatDistanceToNow } from "date-fns";
+import { useState, useEffect } from "react";
 
-const AnswerTree = ({ answer, voteStatus, onAnswerCreated }) => {
+const AnswerTree = ({ answer, userVotes, onAnswerCreated }) => {
+  const [voteStatus, setVoteStatus] = useState(null);
   if (!answer) {
     console.warn("Answer is undefined!");
     return null;
   }
+
+  useEffect(() => {
+    if (!userVotes)
+      return (
+        <div className="spinner-border" role="status">
+          <span className="visually-hidden">Loading...</span>
+        </div>
+      );
+
+    const upvotedAnswers = userVotes.answerVotes?.upvoted || [];
+    const downvotedAnswers = userVotes.answerVotes?.downvoted || [];
+
+    const status = upvotedAnswers.includes(answer._id)
+      ? "upvoted"
+      : downvotedAnswers.includes(answer._id)
+      ? "downvoted"
+      : null;
+
+    setVoteStatus(status);
+  }, [userVotes, answer._id]);
 
   return (
     <div className="mb-3 ms-3">
@@ -33,6 +55,7 @@ const AnswerTree = ({ answer, voteStatus, onAnswerCreated }) => {
               key={child._id}
               answer={child}
               onAnswerCreated={onAnswerCreated}
+              userVotes={userVotes}
             />
           ))}
         </div>

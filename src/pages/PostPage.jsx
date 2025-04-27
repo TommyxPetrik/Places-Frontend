@@ -12,14 +12,23 @@ const Postpage = () => {
   const [loading, setLoading] = useState(true);
   const [answerTree, setAnswerTree] = useState([]);
   const { postId } = useParams();
-  const [userVotes, setUserVotes] = useState();
+  const [userVotes, setUserVotes] = useState([]);
+  const [loadingAnswers, setLoadingAnswers] = useState(true);
 
-  const fetchPosts = async () => {
+  const fetchUserVotes = async () => {
     try {
       const res = await fetch("http://localhost:3000/users/getUserVotes");
       const votes = await res.json();
       setUserVotes(votes);
+      return votes;
+    } catch (error) {
+      console.error("Error fetching user votes:", error);
+    }
+  };
 
+  const fetchPost = async () => {
+    try {
+      const userVotes = await fetchUserVotes();
       const response = await fetch(
         `http://localhost:3000/public/questions/${postId}`,
         {
@@ -37,24 +46,34 @@ const Postpage = () => {
 
       const enrichedPost = { ...data, voteStatus };
       setPost(enrichedPost);
-      const response2 = await fetch(
-        `http://localhost:3000/answers/getAnswerTree/${postId}`,
-        {
-          method: "GET",
-        }
-      );
-      const answerTree = await response2.json();
-      setAnswerTree(answerTree);
     } catch (error) {
-      console.error("Error fetching posts:", error.mesage);
+      console.error("Error fetching post:", error.mesage);
     } finally {
       setLoading(false);
     }
   };
 
+  const fetchAnswers = async () => {
+    setLoadingAnswers(true);
+    try {
+      const userVotes = await fetchUserVotes();
+
+      const response = await fetch(
+        `http://localhost:3000/answers/getAnswerTree/${postId}`
+      );
+      const answerTree = await response.json();
+      setAnswerTree(answerTree);
+    } catch (error) {
+      console.error("Error fetching answers:", error);
+    } finally {
+      setLoadingAnswers(false);
+    }
+  };
+
   useEffect(() => {
-    fetchPosts();
-  }, [postId, userVotes]);
+    fetchPost();
+    fetchAnswers();
+  }, [postId]);
 
   return (
     <>
@@ -81,8 +100,7 @@ const Postpage = () => {
                   questiontitle={post.title}
                   questionbody={post.body}
                   upvotes={post.upvotes}
-                  answers={post.answers}
-                  onPostUpdated={fetchPosts}
+                  onPostUpdated={fetchPost}
                   voteStatus={post.voteStatus}
                 />
                 <div className="" style={{ display: "flex" }}>
@@ -95,25 +113,16 @@ const Postpage = () => {
                     marginLeft: "2rem",
                   }}
                 >
-                  <CreateAnswer onAnswerCreated={fetchPosts} />
+                  <CreateAnswer onAnswerCreated={fetchAnswers} />
                 </div>
                 <div className="col-lg-12">
                   {answerTree.map((answer) => {
-                    const upvotedAnswers =
-                      userVotes?.answerVotes?.upvoted || [];
-                    const downvotedAnswers =
-                      userVotes?.answerVotes?.downvoted || [];
-                    const voteStatus = upvotedAnswers.includes(answer._id)
-                      ? "upvoted"
-                      : downvotedAnswers.includes(answer._id)
-                      ? "downvoted"
-                      : null;
                     return (
                       <AnswerTree
                         key={answer._id}
                         answer={answer}
-                        onAnswerCreated={fetchPosts}
-                        voteStatus={voteStatus}
+                        onAnswerCreated={fetchAnswers}
+                        userVotes={userVotes}
                       />
                     );
                   })}

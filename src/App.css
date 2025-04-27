@@ -90,3 +90,7 @@ body {
   color: white;
   opacity: 0.5;
 }
+
+.grid-wrapper {
+  overflow-x: auto;
+}

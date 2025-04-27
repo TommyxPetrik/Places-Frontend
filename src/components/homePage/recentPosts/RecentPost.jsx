@@ -2,7 +2,7 @@ import React from "react";
 import RecentPostBody from "./RecentPostBody";
 import { useNavigate } from "react-router-dom";
 
-const RecentPosts = ({
+const RecentPost = ({
   subplace,
   questiontitle,
   username,
@@ -19,8 +19,8 @@ const RecentPosts = ({
     <>
       <div
         onClick={handleClick}
-        className="card bg-dark text-white mb-3 card-hover p-3"
-        style={{ width: "16rem", height: "6rem", cursor: "pointer" }}
+        className="card bg-dark text-white mb-3 card-hover p-3 "
+        style={{ height: "6rem", cursor: "pointer" }}
       >
         <RecentPostBody
           subplace={subplace}
@@ -34,4 +34,4 @@ const RecentPosts = ({
   );
 };
 
-export default RecentPosts;
+export default RecentPost;

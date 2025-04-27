@@ -5,13 +5,14 @@ import { formatDistanceToNow } from "date-fns";
 const RecentPostsAll = () => {
   const [loading, setLoading] = useState(true);
   const [cachedPosts, setCachedposts] = useState(null);
-  const [posts, setPosts] = useState(cachedPosts, []);
+  const [posts, setPosts] = useState(cachedPosts || []);
 
   useEffect(() => {
     if (cachedPosts) {
       setLoading(false);
     }
     if (!cachedPosts) {
+      setLoading(true);
       const fetchPosts = async () => {
         try {
           const response = await fetch(
@@ -29,7 +30,7 @@ const RecentPostsAll = () => {
 
       fetchPosts();
     }
-  }, [cachedPosts, setCachedposts]);
+  }, [cachedPosts]);
 
   return (
     <>
@@ -39,7 +40,6 @@ const RecentPostsAll = () => {
           marginTop: "2rem",
           padding: "1rem",
           backgroundColor: "rgb(244 244 244 / 0.01)",
-          width: "18rem",
         }}
       >
         <h5
