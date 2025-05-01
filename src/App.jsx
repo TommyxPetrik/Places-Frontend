@@ -1,5 +1,4 @@
 import "./App.css";
-import Homepage from "./pages/Homepage";
 import { RouterProvider, createBrowserRouter } from "react-router-dom";
 import RootLayout from "./pages/RootLayout";
 import ErrorPage from "./pages/ErrorPage";
@@ -7,8 +6,10 @@ import NewsFeed from "./components/homePage/newsFeed/NewsFeed";
 import CreatePostPage from "./pages/CreatePostPage";
 import Postpage from "./pages/PostPage";
 import RecentPostsAll from "./components/homePage/recentPosts/RecentPostsAll";
-import { useEffect, useState } from "react";
-import { useUserVotes } from "./context/UserVotesContext";
+import { useState } from "react";
+import SignInPage from "./pages/SignInPage";
+import SignUpPage from "./pages/SignUpPage";
+import ProtectedRoute from "./utils/ProtectedRoute";
 
 function App() {
   const [cachedPosts, setCachedPosts] = useState(null);
@@ -18,7 +19,6 @@ function App() {
       path: "/",
       element: <RootLayout />,
       errorElement: <ErrorPage />,
-      // loader: tokenLoader,
       id: "root",
       children: [
         {
@@ -41,7 +41,15 @@ function App() {
         },
         {
           path: "create",
-          element: <CreatePostPage />,
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-6">
+                  <CreatePostPage />
+                </div>
+              </div>
+            </div>
+          ),
         },
         {
           path: "post/:postId",
@@ -53,6 +61,30 @@ function App() {
                 </div>
                 <div className="col-lg-4">
                   <RecentPostsAll />
+                </div>
+              </div>
+            </div>
+          ),
+        },
+        {
+          path: "SignIn",
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-6">
+                  <SignInPage />
+                </div>
+              </div>
+            </div>
+          ),
+        },
+        {
+          path: "SignUp",
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-6">
+                  <SignUpPage />
                 </div>
               </div>
             </div>

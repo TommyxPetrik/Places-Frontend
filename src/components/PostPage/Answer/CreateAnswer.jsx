@@ -4,11 +4,14 @@ import ImageUploadButton from "./ImageUploadButton";
 import CreateAnswerButton from "./CreateAnswerButton";
 import CancelAnswerButton from "./CancelAnswerButton";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const CreateAnswer = ({ onAnswerCreated }) => {
   const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
   const { postId } = useParams();
+  const { user } = useAuth();
+  const token = user?.token;
 
   const handleBlur = () => {
     if (value.trim() === "") {
@@ -24,6 +27,7 @@ const CreateAnswer = ({ onAnswerCreated }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify({
           body: value,

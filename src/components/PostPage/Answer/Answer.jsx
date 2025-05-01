@@ -10,6 +10,7 @@ const Answer = ({
   answerId,
   onAnswerCreated,
   voteStatus,
+  onRequireLogin,
 }) => {
   return (
     <>
@@ -17,7 +18,6 @@ const Answer = ({
         className="card"
         style={{
           marginTop: "2rem",
-          // marginLeft: "2rem",
           paddingTop: "0rem",
           paddingLeft: "1rem",
           paddingRight: "1rem",
@@ -36,6 +36,7 @@ const Answer = ({
           onClick={onClick}
           onAnswerCreated={onAnswerCreated}
           voteStatus={voteStatus}
+          onRequireLogin={onRequireLogin}
         />
       </div>
     </>

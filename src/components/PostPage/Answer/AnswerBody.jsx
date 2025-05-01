@@ -11,6 +11,7 @@ const AnswerBody = ({
   answerId,
   onAnswerCreated,
   voteStatus,
+  onRequireLogin,
 }) => {
   return (
     <div>
@@ -23,6 +24,7 @@ const AnswerBody = ({
           answerId={answerId}
           onAnswerCreated={onAnswerCreated}
           voteStatus={voteStatus}
+          onRequireLogin={onRequireLogin}
         />
       </div>
     </div>

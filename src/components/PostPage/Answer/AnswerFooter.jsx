@@ -5,16 +5,32 @@ import AnswerDownvoteButton from "./AnswerDownvoteButton";
 import AnswerReplyButton from "./AnswerReplyButton";
 import AnswerShareButton from "./AnswerShareButton";
 import CreateReply from "./CreateReply";
+import { useAuth } from "../../context/AuthContext";
 
-const AnswerFooter = ({ upvotes, answerId, onAnswerCreated, voteStatus }) => {
+const AnswerFooter = ({
+  upvotes,
+  answerId,
+  onAnswerCreated,
+  voteStatus,
+  onRequireLogin,
+}) => {
   const [reply, setReply] = useState(false);
+  const { user } = useAuth();
+  const token = user?.token;
 
   const handleUpvote = async () => {
+    if (!token) {
+      onRequireLogin?.();
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3000/answers/upvote/${answerId}`,
         {
           method: "PUT",
+          headers: {
+            "x-access-token": user.token,
+          },
         }
       );
       const updatedAnswer = await response.json();
@@ -25,11 +41,18 @@ const AnswerFooter = ({ upvotes, answerId, onAnswerCreated, voteStatus }) => {
   };
 
   const handleDownvote = async () => {
+    if (!token) {
+      onRequireLogin?.();
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3000/answers/downvote/${answerId}`,
         {
           method: "PUT",
+          headers: {
+            "x-access-token": user.token,
+          },
         }
       );
       const updatedAnswer = await response.json();

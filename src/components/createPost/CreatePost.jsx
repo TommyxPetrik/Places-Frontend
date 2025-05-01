@@ -3,7 +3,8 @@ import SelectSubplace from "../createPost/SelectSubplace";
 import Questiontitle from "../createPost/QuestionTitle";
 import QuestionBody from "../createPost/QuestionBody";
 import SelectTags from "../createPost/SelectTags";
-import CreatePostPageButton from "../createPost/CreatePostPageButton";
+import CreatePostFormButton from "../createPost/CreatePostFormButton";
+import { useAuth } from "../context/AuthContext";
 
 const CreatePost = () => {
   const [selectedTag, setSelectedTag] = useState("");
@@ -12,14 +13,21 @@ const CreatePost = () => {
   const [questionbody, setQuestionbody] = useState("");
   const [selectedSubplace, setSelectedSubplace] = useState("");
   const [loading, setLoading] = useState(true);
+  const { user } = useAuth();
+  const token = user?.token;
 
   const handleCreatePost = async () => {
     let subplace;
     try {
+      console.log(token);
+
       const response = await fetch(
         `http://localhost:3000/subplace/name?name=${selectedSubplace}`,
         {
           method: "GET",
+          headers: {
+            "x-access-token": token,
+          },
         }
       );
       subplace = await response.json();
@@ -39,6 +47,7 @@ const CreatePost = () => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify(postData),
       });
@@ -82,7 +91,7 @@ const CreatePost = () => {
           handleSelectChange={handleSelectChange}
           handleRemoveTag={handleRemoveTag}
         />
-        <CreatePostPageButton handleCreatePost={handleCreatePost} />
+        <CreatePostFormButton handleCreatePost={handleCreatePost} />
       </div>
     </>
   );

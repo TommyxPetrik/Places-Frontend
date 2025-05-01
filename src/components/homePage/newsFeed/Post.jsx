@@ -12,6 +12,7 @@ const Post = ({
   postId,
   onPostUpdated,
   voteStatus,
+  onRequireLogin,
 }) => {
   return (
     <>
@@ -42,6 +43,7 @@ const Post = ({
           postId={postId}
           onPostUpdated={onPostUpdated}
           voteStatus={voteStatus}
+          onRequireLogin={onRequireLogin}
         />
       </div>
     </>

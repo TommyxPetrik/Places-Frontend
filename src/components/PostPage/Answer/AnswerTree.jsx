@@ -3,7 +3,7 @@ import Answer from "./Answer";
 import { formatDistanceToNow } from "date-fns";
 import { useState, useEffect } from "react";
 
-const AnswerTree = ({ answer, userVotes, onAnswerCreated }) => {
+const AnswerTree = ({ answer, userVotes, onAnswerCreated, onRequireLogin }) => {
   const [voteStatus, setVoteStatus] = useState(null);
   if (!answer) {
     console.warn("Answer is undefined!");
@@ -11,15 +11,9 @@ const AnswerTree = ({ answer, userVotes, onAnswerCreated }) => {
   }
 
   useEffect(() => {
-    if (!userVotes)
-      return (
-        <div className="spinner-border" role="status">
-          <span className="visually-hidden">Loading...</span>
-        </div>
-      );
-
-    const upvotedAnswers = userVotes.answerVotes?.upvoted || [];
-    const downvotedAnswers = userVotes.answerVotes?.downvoted || [];
+    if (!userVotes) return;
+    const upvotedAnswers = userVotes?.upvoted || [];
+    const downvotedAnswers = userVotes?.downvoted || [];
 
     const status = upvotedAnswers.includes(answer._id)
       ? "upvoted"
@@ -47,6 +41,7 @@ const AnswerTree = ({ answer, userVotes, onAnswerCreated }) => {
         }
         upvotes={answer.upvotes}
         onAnswerCreated={onAnswerCreated}
+        onRequireLogin={onRequireLogin}
       />
       {answer.children && answer.children.length > 0 && (
         <div className="ms-4 border-start ps-3">
@@ -56,6 +51,7 @@ const AnswerTree = ({ answer, userVotes, onAnswerCreated }) => {
               answer={child}
               onAnswerCreated={onAnswerCreated}
               userVotes={userVotes}
+              onRequireLogin={onRequireLogin}
             />
           ))}
         </div>

@@ -4,21 +4,34 @@ import PostUpvoteButton from "./PostUpvoteButton";
 import PostDownvoteButton from "./PostDownvoteButton";
 import PostCommentsButton from "./PostCommentsButton";
 import PostShareButton from "./PostShareButton";
-import { useState, useEffect } from "react";
+import { useAuth } from "../../context/AuthContext";
 
-const PostFooter = ({ upvotes, postId, onPostUpdated, voteStatus }) => {
-  const [localVoteStatus, setLocalVoteStatus] = useState(voteStatus);
+const PostFooter = ({
+  upvotes,
+  postId,
+  onPostUpdated,
+  voteStatus,
+  onRequireLogin,
+}) => {
+  const { user } = useAuth();
+  const token = user?.token;
 
   const handleUpvote = async () => {
+    if (!token) {
+      onRequireLogin?.();
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3000/questions/upvote/${postId}`,
         {
           method: "PUT",
+          headers: {
+            "x-access-token": user.token,
+          },
         }
       );
       const updatedPost = await response.json();
-      setLocalVoteStatus((prev) => (prev === "upvoted" ? null : "upvoted"));
       onPostUpdated(updatedPost);
     } catch (error) {
       console.error("Upvote error:", error.message);
@@ -26,24 +39,26 @@ const PostFooter = ({ upvotes, postId, onPostUpdated, voteStatus }) => {
   };
 
   const handleDownvote = async () => {
+    if (!token) {
+      onRequireLogin?.();
+      return;
+    }
     try {
       const response = await fetch(
         `http://localhost:3000/questions/downvote/${postId}`,
         {
           method: "PUT",
+          headers: {
+            "x-access-token": user.token,
+          },
         }
       );
       const updatedPost = await response.json();
-      setLocalVoteStatus((prev) => (prev === "downvoted" ? null : "downvoted"));
       onPostUpdated(updatedPost);
     } catch (error) {
       console.error("Downvote error:", error.message);
     }
   };
-
-  useEffect(() => {
-    setLocalVoteStatus(voteStatus);
-  }, [voteStatus]);
 
   return (
     <div className="card-footer bg-transparent border-0 p-0 mt-0">
@@ -52,11 +67,11 @@ const PostFooter = ({ upvotes, postId, onPostUpdated, voteStatus }) => {
           <PostUpvotes upvotes={upvotes} />
           <PostUpvoteButton
             onClick={handleUpvote}
-            isActive={localVoteStatus === "upvoted"}
+            isActive={voteStatus === "upvoted"}
           />
           <PostDownvoteButton
             onClick={handleDownvote}
-            isActive={localVoteStatus === "downvoted"}
+            isActive={voteStatus === "downvoted"}
           />
           <PostCommentsButton postId={postId} />
           <PostShareButton />

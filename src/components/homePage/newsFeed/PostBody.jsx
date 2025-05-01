@@ -14,6 +14,7 @@ const PostBody = ({
   postId,
   onPostUpdated,
   voteStatus,
+  onRequireLogin,
 }) => {
   const navigate = useNavigate();
 
@@ -42,6 +43,7 @@ const PostBody = ({
           postId={postId}
           onPostUpdated={onPostUpdated}
           voteStatus={voteStatus}
+          onRequireLogin={onRequireLogin}
         />
       </div>
     </div>

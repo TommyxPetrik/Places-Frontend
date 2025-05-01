@@ -4,11 +4,14 @@ import ImageUploadButton from "./ImageUploadButton";
 import CreateAnswerButton from "./CreateAnswerButton";
 import CancelAnswerButton from "./CancelAnswerButton";
 import { useParams } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
 const CreateAnswer = ({ onAnswerCreated, onCancel, answerId }) => {
   const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
   const { postId } = useParams();
+  const { user } = useAuth();
+  const token = user?.token;
 
   const handleCreateAnswer = async () => {
     if (!value.trim()) return;
@@ -17,6 +20,7 @@ const CreateAnswer = ({ onAnswerCreated, onCancel, answerId }) => {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
+          "x-access-token": token,
         },
         body: JSON.stringify({
           body: value,
@@ -28,7 +32,6 @@ const CreateAnswer = ({ onAnswerCreated, onCancel, answerId }) => {
       if (!response) throw new Error("Failed to post answer");
 
       const answer = await response.json();
-      console.log("Answer created");
 
       setValue("");
       setExpanded(false);
