@@ -3,6 +3,7 @@ import Post from "./Post";
 import { formatDistanceToNow } from "date-fns";
 import { useAuth } from "../../context/AuthContext";
 import SignInError from "../../SignInSignUpPage/SignInError";
+import { useLocation } from "react-router-dom";
 
 const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   const [posts, setPosts] = useState(cachedPosts || []);
@@ -15,15 +16,67 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
+  const location = useLocation();
 
   useEffect(() => {
-    if (cachedPosts) {
-      setPosts(cachedPosts);
+    const refreshCachedPosts = async () => {
+      if (!cachedPosts || cachedPosts.length === 0) {
+        setLoading(false);
+        return;
+      }
+
+      setLoading(true);
+
+      const freshVotes = token
+        ? await fetch("http://localhost:3000/users/getUserVotes", {
+            headers: {
+              "x-access-token": token,
+            },
+          })
+            .then((res) => (res.ok ? res.json() : null))
+            .catch((err) => {
+              console.warn("Error fetching votes:", err.message);
+              return null;
+            })
+        : null;
+
+      const updatedPosts = await Promise.all(
+        cachedPosts.map(async (cachedPost) => {
+          try {
+            const res = await fetch(
+              `http://localhost:3000/public/questions/${cachedPost._id}`
+            );
+            const freshPost = await res.json();
+
+            const voteStatus = freshVotes?.questionVotes?.upvoted.includes(
+              freshPost._id
+            )
+              ? "upvoted"
+              : freshVotes?.questionVotes?.downvoted.includes(freshPost._id)
+              ? "downvoted"
+              : null;
+
+            return { ...freshPost, voteStatus };
+          } catch (err) {
+            console.warn("Error refreshing post:", err.message);
+            return cachedPost;
+          }
+        })
+      );
+
+      setPosts(updatedPosts);
+      setCachedPosts(updatedPosts);
+      setLoading(false);
+    };
+
+    if (location.pathname === "/") {
+      refreshCachedPosts();
     }
-  }, [cachedPosts]);
+  }, [location.pathname]);
 
   const fetchData = async (append = false) => {
-    setLoading(true);
+    if (!append) setLoading(true);
+    setIsFetching(true);
     try {
       let freshVotes = null;
 
@@ -79,6 +132,9 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
           } catch (err) {
             console.error("Error fetching single post", err);
             return { ...cachedPost, voteStatus: null };
+          } finally {
+            if (!append) setLoading(false);
+            setIsFetching(false);
           }
         })
       );
@@ -106,8 +162,10 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   };
 
   useEffect(() => {
-    fetchData();
-  }, [cachedPosts, setCachedPosts, token]);
+    if (!cachedPosts || cachedPosts.length === 0) {
+      fetchData();
+    }
+  }, [token]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -135,24 +193,47 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
     }
   }, [page]);
 
-  const handlePostUpdate = (updatedPost) => {
-    const voteStatus = userVotes?.questionVotes?.upvoted.includes(
-      updatedPost._id
-    )
-      ? "upvoted"
-      : userVotes?.questionVotes?.downvoted.includes(updatedPost._id)
-      ? "downvoted"
-      : null;
+  const handlePostUpdate = async (updatedPost) => {
+    try {
+      let freshVotes = null;
+      if (token) {
+        const votesRes = await fetch(
+          "http://localhost:3000/users/getUserVotes",
+          {
+            headers: {
+              "x-access-token": token,
+            },
+          }
+        );
 
-    const updatedWithStatus = { ...updatedPost, voteStatus };
+        if (votesRes.ok) {
+          freshVotes = await votesRes.json();
+          setUserVotes(freshVotes);
+        } else {
+          console.warn("No user votes found or unauthorized.");
+        }
+      }
 
-    setPosts((prev) =>
-      prev.map((p) => (p._id === updatedPost._id ? updatedWithStatus : p))
-    );
+      const voteStatus = freshVotes?.questionVotes?.upvoted.includes(
+        updatedPost._id
+      )
+        ? "upvoted"
+        : freshVotes?.questionVotes?.downvoted.includes(updatedPost._id)
+        ? "downvoted"
+        : null;
 
-    setCachedPosts((prev) =>
-      prev.map((p) => (p._id === updatedPost._id ? updatedWithStatus : p))
-    );
+      const updatedWithStatus = { ...updatedPost, voteStatus };
+
+      setPosts((prev) =>
+        prev.map((p) => (p._id === updatedPost._id ? updatedWithStatus : p))
+      );
+
+      setCachedPosts((prev) =>
+        prev.map((p) => (p._id === updatedPost._id ? updatedWithStatus : p))
+      );
+    } catch (error) {
+      console.error("Error updating post:", error.message);
+    }
   };
 
   const handlePostSelect = (postId) => {
@@ -175,33 +256,34 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   return (
     <div>
       {showModal && <SignInError onClose={() => setShowModal(false)} />}
-      {posts.map((post) => (
-        <Post
-          key={post._id}
-          postId={post._id}
-          subplace={post.subplace?.name}
-          username={post.userid?.name}
-          time={formatDistanceToNow(new Date(post.createdAt), {
-            addSuffix: true,
-          })}
-          tags={post.tags}
-          questiontitle={post.title}
-          questionbody={post.body}
-          upvotes={post.upvotes}
-          onPostUpdated={handlePostUpdate}
-          onClick={() => handlePostSelect(post._id)}
-          voteStatus={null}
-          onRequireLogin={openModal}
-        />
-      ))}
-      {loading && hasMore && (
+      {loading ? (
         <div className="d-flex justify-content-center my-3">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
           </div>
         </div>
+      ) : (
+        posts.map((post) => (
+          <Post
+            key={post._id}
+            postId={post._id}
+            subplace={post.subplace?.name}
+            username={post.userid?.name}
+            time={formatDistanceToNow(new Date(post.createdAt), {
+              addSuffix: true,
+            })}
+            tags={post.tags}
+            questiontitle={post.title}
+            questionbody={post.body}
+            upvotes={post.upvotes}
+            onPostUpdated={handlePostUpdate}
+            onClick={() => handlePostSelect(post._id)}
+            voteStatus={post.voteStatus}
+            onRequireLogin={openModal}
+          />
+        ))
       )}
-      {!hasMore && (
+      {!loading && !hasMore && (
         <div className="text-center my-3 text-white">
           <p>Žiadne ďalšie príspevky na načítanie.</p>
         </div>
