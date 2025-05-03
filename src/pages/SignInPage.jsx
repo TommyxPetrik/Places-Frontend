@@ -87,7 +87,6 @@ const SignInPage = () => {
       }
 
       const result = await response.json();
-      console.log("Login success:", result);
 
       login({
         token: result.token,

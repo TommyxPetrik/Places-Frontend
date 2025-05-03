@@ -1,16 +1,23 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
 
-const CreateSubplaceButton = ({ first }) => {
+const CreateSubplaceButton = ({ first, onClick, onRequireLogin }) => {
   const navigate = useNavigate();
+  const { user } = useAuth();
+  const token = user?.token;
 
   const handleClick = () => {
-    navigate(`/`);
+    if (!token) {
+      onRequireLogin?.();
+      return;
+    }
+    navigate("/createSubplace");
   };
 
   return (
     <>
-      <div style={{ cursor: "pointer" }}>
+      <div onClick={handleClick} style={{ cursor: "pointer" }}>
         <li className="list-group-item text-white border-0 mb-1 custom-button">
           <i
             className="bi bi-plus"

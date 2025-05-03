@@ -5,9 +5,11 @@ import PostBackButton from "../components/PostPage/PostBackButton";
 import { formatDistanceToNow } from "date-fns";
 import AnswerTree from "../components/PostPage/Answer/AnswerTree";
 import CreateAnswer from "../components/PostPage/Answer/CreateAnswer";
-import { useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { useAuth } from "../components/context/AuthContext";
 import SignInError from "../components/SignInSignUpPage/SignInError";
+import TwoFactorDelete from "../components/homePage/newsFeed/TwoFactorDelete";
+import ErrorPage from "./ErrorPage";
 
 const Postpage = () => {
   const [post, setPost] = useState([]);
@@ -22,6 +24,14 @@ const Postpage = () => {
   const openModal = () => setShowModal(true);
   const [postVotes, setPostVotes] = useState(null);
   const [answerVotes, setAnswerVotes] = useState(null);
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [postToDelete, setPostToDelete] = useState(null);
+  const [error, setError] = useState(null);
+
+  const openDeleteModal = (postId) => {
+    setPostToDelete(postId);
+    setShowDeleteModal(true);
+  };
 
   const fetchUserVotes = async () => {
     if (!token) {
@@ -48,17 +58,26 @@ const Postpage = () => {
 
   const fetchPost = async () => {
     setLoading(true);
+    setError(null); // reset error
     try {
       const response = await fetch(
         `http://localhost:3000/public/questions/${postId}`
       );
-      const data = await response.json();
 
+      if (!response.ok) {
+        if (response.status === 404) {
+          setError("Post not found");
+        } else {
+          setError("Failed to fetch post");
+        }
+        return;
+      }
+
+      const data = await response.json();
       let voteStatus = null;
 
       if (token) {
         const userVotes = await fetchUserVotes();
-
         const upvotedQuestions = userVotes?.questionVotes?.upvoted || [];
         const downvotedQuestions = userVotes?.questionVotes?.downvoted || [];
 
@@ -67,15 +86,13 @@ const Postpage = () => {
           : downvotedQuestions.includes(data._id)
           ? "downvoted"
           : null;
-        const enrichedPost = { ...data, voteStatus };
-        setPost(enrichedPost);
-      } else {
-        setUserVotes(null);
-        const enrichedPost = { ...data, voteStatus: null };
-        setPost(enrichedPost);
       }
+
+      const enrichedPost = { ...data, voteStatus };
+      setPost(enrichedPost);
     } catch (error) {
       console.error("Error fetching post:", error.message);
+      setError("Network error while fetching post");
     } finally {
       setLoading(false);
     }
@@ -117,6 +134,29 @@ const Postpage = () => {
     }
   };
 
+  const handleDeletePost = async () => {
+    if (!user?.token || !postToDelete) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:3000/questions/${postToDelete}`,
+        {
+          method: "DELETE",
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to delete post");
+      console.log("Príspevok bol úspešne odstránený");
+      setShowDeleteModal(false);
+      fetchPost();
+    } catch (err) {
+      console.error("Delete error:", err.message);
+    }
+  };
+
   const handleVoteChange = async () => {
     await fetchUserVotes();
     await fetchAnswers();
@@ -136,7 +176,15 @@ const Postpage = () => {
   return (
     <div>
       {showModal && <SignInError onClose={() => setShowModal(false)} />}
-      {loading ? (
+      {showDeleteModal && (
+        <TwoFactorDelete
+          onClose={() => setShowDeleteModal(false)}
+          onConfirm={handleDeletePost}
+        />
+      )}
+      {error ? (
+        <ErrorPage message={error} />
+      ) : loading ? (
         <div className="spinner-border" role="status">
           <span className="visually-hidden">Loading...</span>
         </div>
@@ -166,6 +214,9 @@ const Postpage = () => {
                   : null
               }
               onRequireLogin={openModal}
+              userId={post.userid?._id}
+              edited={post.edited}
+              onRequestDelete={() => openDeleteModal(post._id)}
             />
             <div className="" style={{ display: "flex" }}>
               <PostBackButton />
@@ -177,7 +228,10 @@ const Postpage = () => {
                 marginLeft: "2rem",
               }}
             >
-              <CreateAnswer onAnswerCreated={fetchAnswers} />
+              <CreateAnswer
+                onAnswerCreated={fetchAnswers}
+                onRequireLogin={openModal}
+              />
             </div>
             <div className="col-lg-12">
               {answerTree.map((answer) => (

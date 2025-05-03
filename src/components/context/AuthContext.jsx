@@ -10,6 +10,7 @@ export const AuthProvider = ({ children }) => {
     const token = localStorage.getItem("token");
     const email = localStorage.getItem("email");
     const id = localStorage.getItem("id");
+    const role = localStorage.getItem("role");
 
     if (token && email && id) {
       setUser({ token, email, id });
@@ -22,6 +23,7 @@ export const AuthProvider = ({ children }) => {
     localStorage.setItem("token", userData.token);
     localStorage.setItem("email", userData.email);
     localStorage.setItem("id", userData.id);
+    localStorage.setItem("role", userData.role);
   };
 
   const logout = () => {

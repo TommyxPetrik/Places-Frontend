@@ -17,6 +17,7 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
   const location = useLocation();
+  const prevUserRef = React.useRef();
 
   useEffect(() => {
     const refreshCachedPosts = async () => {
@@ -162,6 +163,15 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
   };
 
   useEffect(() => {
+    if (prevUserRef.current && !user) {
+      setCachedPosts([]);
+      setPosts([]);
+      fetchData();
+    }
+    prevUserRef.current = user;
+  }, [user]);
+
+  useEffect(() => {
     if (!cachedPosts || cachedPosts.length === 0) {
       fetchData();
     }
@@ -280,6 +290,7 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
             onClick={() => handlePostSelect(post._id)}
             voteStatus={post.voteStatus}
             onRequireLogin={openModal}
+            edited={post.edited}
           />
         ))
       )}

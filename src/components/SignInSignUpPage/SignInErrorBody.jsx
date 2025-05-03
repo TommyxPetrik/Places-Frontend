@@ -1,10 +1,10 @@
 import React from "react";
 
-const SignInErrorBody = () => {
+const SignInErrorBody = ({ bodyText }) => {
   return (
     <>
       <div className="modal-body">
-        <p>Ak chceš hlasovať, musíš sa prihlásiť.</p>
+        <p>{bodyText}</p>
       </div>
     </>
   );

@@ -19,8 +19,6 @@ const CreatePost = () => {
   const handleCreatePost = async () => {
     let subplace;
     try {
-      console.log(token);
-
       const response = await fetch(
         `http://localhost:3000/subplace/name?name=${selectedSubplace}`,
         {
@@ -55,7 +53,6 @@ const CreatePost = () => {
       if (!response.ok) throw new Error("Failed to create post");
 
       const result = await response.json();
-      console.log("Post created:", result);
     } catch (error) {
       console.error("Error fetching question:", error.mesage);
     }

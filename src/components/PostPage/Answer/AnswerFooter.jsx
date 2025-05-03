@@ -63,6 +63,10 @@ const AnswerFooter = ({
   };
 
   const replyToggle = () => {
+    if (!token) {
+      onRequireLogin?.();
+      return;
+    }
     setReply((prev) => !prev);
   };
 

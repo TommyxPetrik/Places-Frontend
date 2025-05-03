@@ -5,6 +5,10 @@ import PostDownvoteButton from "./PostDownvoteButton";
 import PostCommentsButton from "./PostCommentsButton";
 import PostShareButton from "./PostShareButton";
 import { useAuth } from "../../context/AuthContext";
+import EditPostButton from "../../PostPage/EditPostButton";
+import PostDeleteButton from "./PostDeleteButton";
+import { useState } from "react";
+import TwoFactorDelete from "./TwoFactorDelete";
 
 const PostFooter = ({
   upvotes,
@@ -12,9 +16,23 @@ const PostFooter = ({
   onPostUpdated,
   voteStatus,
   onRequireLogin,
+  userId,
+  isEditing,
+  onEditToggle,
+  onSave,
+  onRequestDelete,
 }) => {
   const { user } = useAuth();
   const token = user?.token;
+  const [showDeleteModal, setShowDeleteModal] = useState(false);
+
+  const handleEditClick = () => {
+    if (isEditing) {
+      onSave();
+    } else {
+      onEditToggle();
+    }
+  };
 
   const handleUpvote = async () => {
     if (!token) {
@@ -27,7 +45,7 @@ const PostFooter = ({
         {
           method: "PUT",
           headers: {
-            "x-access-token": user.token,
+            "x-access-token": token,
           },
         }
       );
@@ -49,7 +67,7 @@ const PostFooter = ({
         {
           method: "PUT",
           headers: {
-            "x-access-token": user.token,
+            "x-access-token": token,
           },
         }
       );
@@ -60,24 +78,39 @@ const PostFooter = ({
     }
   };
 
+  const handleCloseModal = () => {
+    setShowDeleteModal(false);
+  };
+
   return (
-    <div className="card-footer bg-transparent border-0 p-0 mt-0">
-      <div className="d-flex justify-content-between align-items-center mt-2">
-        <div className="d-flex gap-2">
-          <PostUpvotes upvotes={upvotes} />
-          <PostUpvoteButton
-            onClick={handleUpvote}
-            isActive={voteStatus === "upvoted"}
-          />
-          <PostDownvoteButton
-            onClick={handleDownvote}
-            isActive={voteStatus === "downvoted"}
-          />
-          <PostCommentsButton postId={postId} />
-          <PostShareButton />
+    <>
+      <div className="card-footer bg-transparent border-0 p-0 mt-0">
+        <div className="d-flex justify-content-between align-items-center mt-2">
+          <div className="d-flex gap-2">
+            <PostUpvotes upvotes={upvotes} />
+            <PostUpvoteButton
+              onClick={handleUpvote}
+              isActive={voteStatus === "upvoted"}
+            />
+            <PostDownvoteButton
+              onClick={handleDownvote}
+              isActive={voteStatus === "downvoted"}
+            />
+            <PostCommentsButton postId={postId} />
+            <PostShareButton postId={postId} />
+            {token && user?.id === userId ? (
+              <>
+                <EditPostButton
+                  onClick={handleEditClick}
+                  isEditing={isEditing}
+                />
+                <PostDeleteButton onClick={onRequestDelete} />
+              </>
+            ) : null}
+          </div>
         </div>
       </div>
-    </div>
+    </>
   );
 };
 

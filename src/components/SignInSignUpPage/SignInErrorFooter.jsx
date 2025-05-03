@@ -1,6 +1,6 @@
 import React from "react";
 
-const SignInErrorFooter = ({ handleClick, onClose }) => {
+const SignInErrorFooter = ({ handleClick, onClose, buttonText }) => {
   return (
     <>
       <div className="modal-footer">
@@ -11,7 +11,7 @@ const SignInErrorFooter = ({ handleClick, onClose }) => {
           onClick={handleClick}
           className="btn btn-dark btn-outline-secondary text-white mt-2"
         >
-          Sign In
+          {buttonText}
         </button>
       </div>
     </>

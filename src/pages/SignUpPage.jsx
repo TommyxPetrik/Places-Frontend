@@ -8,7 +8,6 @@ const SignUpPage = () => {
 
   const handleSubmit = (e) => {
     e.target;
-    console.log({ email, password, checked });
   };
   return (
     <>

@@ -2,7 +2,7 @@ import React from "react";
 import CreateSubplaceButton from "./CreateSubplaceButton";
 import { fi } from "date-fns/locale";
 
-const ListGroup = ({ section, first, subplaces }) => {
+const ListGroup = ({ section, first, subplaces, onRequireLogin }) => {
   return (
     <>
       <div
@@ -16,7 +16,7 @@ const ListGroup = ({ section, first, subplaces }) => {
           {section}
         </div>
         <ul className="list-group list-group-flush">
-          <CreateSubplaceButton first={first} />
+          <CreateSubplaceButton first={first} onRequireLogin={onRequireLogin} />
 
           <div>
             {subplaces.map((subplace) => {

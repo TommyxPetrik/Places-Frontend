@@ -13,6 +13,9 @@ const Post = ({
   onPostUpdated,
   voteStatus,
   onRequireLogin,
+  userId,
+  edited,
+  onRequestDelete,
 }) => {
   return (
     <>
@@ -44,6 +47,9 @@ const Post = ({
           onPostUpdated={onPostUpdated}
           voteStatus={voteStatus}
           onRequireLogin={onRequireLogin}
+          userId={userId}
+          edited={edited}
+          onRequestDelete={onRequestDelete}
         />
       </div>
     </>

@@ -10,6 +10,11 @@ const SignInError = ({ onClose }) => {
   const handleClick = () => {
     navigate("/SignIn");
   };
+
+  const bodyText =
+    "To delete your account, please sign in to verify your identity.";
+  const buttonText = "Sign in ";
+  const headerText = "Sign In Required";
   return (
     <>
       <ModalBackdropFade onClose={onClose} />
@@ -19,7 +24,13 @@ const SignInError = ({ onClose }) => {
         role="dialog"
         style={{ zIndex: 1050 }}
       >
-        <SignInErrorModalBody onClose={onClose} handleClick={handleClick} />
+        <SignInErrorModalBody
+          onClose={onClose}
+          handleClick={handleClick}
+          bodyText={bodyText}
+          headerText={headerText}
+          buttonText={buttonText}
+        />
       </div>
     </>
   );

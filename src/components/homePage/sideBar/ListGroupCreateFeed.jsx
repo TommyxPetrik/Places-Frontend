@@ -1,12 +1,9 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
+import { useAuth } from "../../context/AuthContext";
+import CreateFeedButton from "./CreateFeedButton";
 
-const ListGroup = ({ section, first }) => {
-  const navigate = useNavigate();
-
-  const handleClick = () => {
-    navigate("/create");
-  };
+const ListGroup = ({ section, first, onRequireLogin }) => {
   return (
     <>
       <div
@@ -19,17 +16,7 @@ const ListGroup = ({ section, first }) => {
         >
           {section}
         </div>
-        <div onClick={handleClick} style={{ cursor: "pointer" }}>
-          <ul className="list-group list-group-flush">
-            <li className="list-group-item text-white border-0 mb-1 custom-button">
-              <i
-                className="bi bi-plus"
-                style={{ fontSize: "1rem", color: "cornflowerblue" }}
-              ></i>
-              <span style={{ marginLeft: "0.1rem" }}>{first}</span>
-            </li>
-          </ul>
-        </div>
+        <CreateFeedButton onRequireLogin={onRequireLogin} first={first} />
       </div>
     </>
   );

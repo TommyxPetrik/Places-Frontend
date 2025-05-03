@@ -6,7 +6,7 @@ import CancelAnswerButton from "./CancelAnswerButton";
 import { useParams } from "react-router-dom";
 import { useAuth } from "../../context/AuthContext";
 
-const CreateAnswer = ({ onAnswerCreated }) => {
+const CreateAnswer = ({ onAnswerCreated, onRequireLogin }) => {
   const [expanded, setExpanded] = useState(false);
   const [value, setValue] = useState("");
   const { postId } = useParams();
@@ -38,7 +38,6 @@ const CreateAnswer = ({ onAnswerCreated }) => {
       if (!response) throw new Error("Failed to post answer");
 
       const answer = await response.json();
-      console.log("Answer created");
 
       setValue("");
       setExpanded(false);
@@ -51,15 +50,24 @@ const CreateAnswer = ({ onAnswerCreated }) => {
     }
   };
 
+  const handleSetExpanded = () => {
+    if (!token) {
+      onRequireLogin?.();
+      return;
+    }
+    setExpanded(true);
+  };
+
   return (
     <div className="mb-3 position-relative">
       <textarea
         className="form-control bg-dark text-white white-placeholder"
         placeholder="Add an answer"
         rows={expanded ? 4 : 1}
-        onFocus={() => setExpanded(true)}
+        onFocus={() => handleSetExpanded()}
         value={value}
         onChange={(e) => setValue(e.target.value)}
+        readOnly={!token}
         style={{
           border: "none",
           resize: "none",
