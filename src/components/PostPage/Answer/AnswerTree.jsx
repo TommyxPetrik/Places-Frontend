@@ -3,7 +3,15 @@ import Answer from "./Answer";
 import { formatDistanceToNow } from "date-fns";
 import { useState, useEffect } from "react";
 
-const AnswerTree = ({ answer, userVotes, onAnswerCreated, onRequireLogin }) => {
+const AnswerTree = ({
+  answer,
+  userVotes,
+  onAnswerCreated,
+  onRequireLogin,
+  userId,
+  onAnswerUpdated,
+  onRequestDelete,
+}) => {
   const [voteStatus, setVoteStatus] = useState(null);
   if (!answer) {
     console.warn("Answer is undefined!");
@@ -42,6 +50,10 @@ const AnswerTree = ({ answer, userVotes, onAnswerCreated, onRequireLogin }) => {
         upvotes={answer.upvotes}
         onAnswerCreated={onAnswerCreated}
         onRequireLogin={onRequireLogin}
+        userId={userId}
+        edited={answer.edited}
+        onAnswerUpdated={onAnswerUpdated}
+        onRequestDelete={onRequestDelete}
       />
       {answer.children && answer.children.length > 0 && (
         <div className="ms-4 border-start ps-3">
@@ -52,6 +64,9 @@ const AnswerTree = ({ answer, userVotes, onAnswerCreated, onRequireLogin }) => {
               onAnswerCreated={onAnswerCreated}
               userVotes={userVotes}
               onRequireLogin={onRequireLogin}
+              userId={userId}
+              onAnswerUpdated={onAnswerUpdated}
+              onRequestDelete={onRequestDelete}
             />
           ))}
         </div>

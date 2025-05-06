@@ -11,6 +11,10 @@ const Answer = ({
   onAnswerCreated,
   voteStatus,
   onRequireLogin,
+  userId,
+  onAnswerUpdated,
+  edited,
+  onRequestDelete,
 }) => {
   return (
     <>
@@ -37,6 +41,10 @@ const Answer = ({
           onAnswerCreated={onAnswerCreated}
           voteStatus={voteStatus}
           onRequireLogin={onRequireLogin}
+          userId={userId}
+          onAnswerUpdated={onAnswerUpdated}
+          edited={edited}
+          onRequestDelete={onRequestDelete}
         />
       </div>
     </>

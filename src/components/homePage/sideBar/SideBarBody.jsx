@@ -10,7 +10,7 @@ const SideBarBody = ({ isOpen, subplaces, onRequireLogin }) => {
   const openModal = () => setShowModal(true);
   return (
     <>
-      {showModal && <SignInError onClose={() => setShowModal(false)} />}
+      {showModal && <SignInError setShowModal={setShowModal} />}
       <div
         className={`offcanvas offcanvas-start ${isOpen ? "show" : ""}`}
         style={{
@@ -32,7 +32,7 @@ const SideBarBody = ({ isOpen, subplaces, onRequireLogin }) => {
               first={"Home"}
               second={"Popular"}
               third={"Explore"}
-              fourth={"All"}
+              fourth={"All Subplaces"}
             />
           </div>
           <div className="d-flex flex-column align-items-start mb-3">

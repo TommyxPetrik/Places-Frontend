@@ -16,6 +16,7 @@ const Post = ({
   userId,
   edited,
   onRequestDelete,
+  answerCount,
 }) => {
   return (
     <>
@@ -50,6 +51,7 @@ const Post = ({
           userId={userId}
           edited={edited}
           onRequestDelete={onRequestDelete}
+          answerCount={answerCount}
         />
       </div>
     </>

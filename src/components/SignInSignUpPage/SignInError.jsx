@@ -4,15 +4,19 @@ import { useNavigate } from "react-router-dom";
 import ModalBackdropFade from "./ModalBackdropFade";
 import SignInErrorModalBody from "./SignInErrorModalBody";
 
-const SignInError = ({ onClose }) => {
+const SignInError = ({ setShowModal }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
+    setShowModal(false);
     navigate("/SignIn");
   };
 
-  const bodyText =
-    "To delete your account, please sign in to verify your identity.";
+  const onClose = () => {
+    setShowModal(false);
+  };
+
+  const bodyText = "Please sign in to verify your identity to proceed.";
   const buttonText = "Sign in ";
   const headerText = "Sign In Required";
   return (

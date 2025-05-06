@@ -6,6 +6,9 @@ import AnswerReplyButton from "./AnswerReplyButton";
 import AnswerShareButton from "./AnswerShareButton";
 import CreateReply from "./CreateReply";
 import { useAuth } from "../../context/AuthContext";
+import PostDeleteButton from "../../homePage/newsFeed/PostDeleteButton";
+import EditAnswerButton from "./EditAnswerButton";
+import AnswerDeleteButton from "./AnswerDeleteButton";
 
 const AnswerFooter = ({
   upvotes,
@@ -13,10 +16,23 @@ const AnswerFooter = ({
   onAnswerCreated,
   voteStatus,
   onRequireLogin,
+  isEditing,
+  onEditToggle,
+  onSave,
+  onRequestDelete,
+  userId,
 }) => {
   const [reply, setReply] = useState(false);
   const { user } = useAuth();
   const token = user?.token;
+
+  const handleEditClick = () => {
+    if (isEditing) {
+      onSave();
+    } else {
+      onEditToggle();
+    }
+  };
 
   const handleUpvote = async () => {
     if (!token) {
@@ -85,6 +101,15 @@ const AnswerFooter = ({
           />
           <AnswerReplyButton onClick={replyToggle} />
           <AnswerShareButton />
+          {token && user?.id === userId ? (
+            <>
+              <EditAnswerButton
+                onClick={handleEditClick}
+                isEditing={isEditing}
+              />
+              <AnswerDeleteButton onClick={() => onRequestDelete(answerId)} />
+            </>
+          ) : null}
         </div>
       </div>
       {reply && (

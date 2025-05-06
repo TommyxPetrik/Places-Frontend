@@ -80,10 +80,12 @@ body {
   scrollbar-width: thin;
   overflow: hidden;
   height: 90vh;
+  padding-right: 0.7rem;
 }
 
 .scroll-container:hover {
   overflow: auto;
+  margin-right: -0.7rem;
 }
 
 .white-placeholder::placeholder {

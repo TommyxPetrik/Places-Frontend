@@ -7,8 +7,6 @@ import PostShareButton from "./PostShareButton";
 import { useAuth } from "../../context/AuthContext";
 import EditPostButton from "../../PostPage/EditPostButton";
 import PostDeleteButton from "./PostDeleteButton";
-import { useState } from "react";
-import TwoFactorDelete from "./TwoFactorDelete";
 
 const PostFooter = ({
   upvotes,
@@ -21,10 +19,10 @@ const PostFooter = ({
   onEditToggle,
   onSave,
   onRequestDelete,
+  answerCount,
 }) => {
   const { user } = useAuth();
   const token = user?.token;
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
 
   const handleEditClick = () => {
     if (isEditing) {
@@ -78,10 +76,6 @@ const PostFooter = ({
     }
   };
 
-  const handleCloseModal = () => {
-    setShowDeleteModal(false);
-  };
-
   return (
     <>
       <div className="card-footer bg-transparent border-0 p-0 mt-0">
@@ -96,7 +90,7 @@ const PostFooter = ({
               onClick={handleDownvote}
               isActive={voteStatus === "downvoted"}
             />
-            <PostCommentsButton postId={postId} />
+            <PostCommentsButton postId={postId} answerCount={answerCount} />
             <PostShareButton postId={postId} />
             {token && user?.id === userId ? (
               <>

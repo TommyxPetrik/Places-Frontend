@@ -35,7 +35,7 @@ const PostBodyText = ({
         <h6 className="mb-0">{subplace}</h6>
         <span
           className="text-white opacity-50"
-          style={{ marginLeft: "0.5rem", fontSize: "0.8rem" }}
+          style={{ marginLeft: "0.5rem", fontSize: "1rem" }}
         >
           {username}
         </span>

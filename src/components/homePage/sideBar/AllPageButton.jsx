@@ -5,12 +5,12 @@ const ExplorePageButton = ({ fourth }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/`);
+    navigate(`/AllSubplaces`);
   };
 
   return (
     <>
-      <div style={{ cursor: "pointer" }}>
+      <div onClick={handleClick} style={{ cursor: "pointer" }}>
         <li className="list-group-item  text-white border-0 mb-1 custom-button d-flex align-items-center">
           <i
             className="bi bi-bar-chart"

@@ -5,7 +5,7 @@ import { useAuth } from "../../context/AuthContext";
 import SignInError from "../../SignInSignUpPage/SignInError";
 import { useLocation } from "react-router-dom";
 
-const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
+const NewsFeed = ({ cachedPosts, setCachedPosts }) => {
   const [posts, setPosts] = useState(cachedPosts || []);
   const [loading, setLoading] = useState(true);
   const [userVotes, setUserVotes] = useState();
@@ -291,6 +291,7 @@ const NewsFeed = ({ onPostSelect, cachedPosts, setCachedPosts }) => {
             voteStatus={post.voteStatus}
             onRequireLogin={openModal}
             edited={post.edited}
+            answerCount={post.answers.length}
           />
         ))
       )}

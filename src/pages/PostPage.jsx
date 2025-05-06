@@ -24,13 +24,20 @@ const Postpage = () => {
   const openModal = () => setShowModal(true);
   const [postVotes, setPostVotes] = useState(null);
   const [answerVotes, setAnswerVotes] = useState(null);
-  const [showDeleteModal, setShowDeleteModal] = useState(false);
+  const [showDeleteModalPost, setShowDeleteModalPost] = useState(false);
   const [postToDelete, setPostToDelete] = useState(null);
   const [error, setError] = useState(null);
+  const [ansewrToDelete, setAnsewrToDelete] = useState();
+  const [showDeleteModalAnswer, setShowDeleteModalAnswer] = useState(false);
 
-  const openDeleteModal = (postId) => {
+  const openPostDeleteModal = (postId) => {
     setPostToDelete(postId);
-    setShowDeleteModal(true);
+    setShowDeleteModalPost(true);
+  };
+
+  const openAnswerDeleteModal = (answerId) => {
+    setAnsewrToDelete(answerId);
+    setShowDeleteModalAnswer(true);
   };
 
   const fetchUserVotes = async () => {
@@ -58,7 +65,7 @@ const Postpage = () => {
 
   const fetchPost = async () => {
     setLoading(true);
-    setError(null); // reset error
+    setError(null);
     try {
       const response = await fetch(
         `http://localhost:3000/public/questions/${postId}`
@@ -149,9 +156,30 @@ const Postpage = () => {
       );
 
       if (!res.ok) throw new Error("Failed to delete post");
-      console.log("Príspevok bol úspešne odstránený");
-      setShowDeleteModal(false);
+      setShowDeleteModalPost(false);
       fetchPost();
+    } catch (err) {
+      console.error("Delete error:", err.message);
+    }
+  };
+
+  const handleDeleteAnswer = async () => {
+    if (!user?.token || !ansewrToDelete) return;
+
+    try {
+      const res = await fetch(
+        `http://localhost:3000/answers/${ansewrToDelete}`,
+        {
+          method: "DELETE",
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (!res.ok) throw new Error("Failed to delete post");
+      setShowDeleteModalAnswer(false);
+      fetchAnswers();
     } catch (err) {
       console.error("Delete error:", err.message);
     }
@@ -176,10 +204,16 @@ const Postpage = () => {
   return (
     <div>
       {showModal && <SignInError onClose={() => setShowModal(false)} />}
-      {showDeleteModal && (
+      {showDeleteModalPost && (
         <TwoFactorDelete
-          onClose={() => setShowDeleteModal(false)}
+          onClose={() => setShowDeleteModalPost(false)}
           onConfirm={handleDeletePost}
+        />
+      )}
+      {showDeleteModalAnswer && (
+        <TwoFactorDelete
+          onClose={() => setShowDeleteModalAnswer(false)}
+          onConfirm={handleDeleteAnswer}
         />
       )}
       {error ? (
@@ -216,7 +250,7 @@ const Postpage = () => {
               onRequireLogin={openModal}
               userId={post.userid?._id}
               edited={post.edited}
-              onRequestDelete={() => openDeleteModal(post._id)}
+              onRequestDelete={() => openPostDeleteModal(post._id)}
             />
             <div className="" style={{ display: "flex" }}>
               <PostBackButton />
@@ -241,6 +275,9 @@ const Postpage = () => {
                   onAnswerCreated={handleVoteChange}
                   userVotes={answerVotes}
                   onRequireLogin={openModal}
+                  userId={answer.userid}
+                  onAnswerUpdated={fetchAnswers}
+                  onRequestDelete={openAnswerDeleteModal}
                 />
               ))}
             </div>

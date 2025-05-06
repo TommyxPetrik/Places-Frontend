@@ -10,9 +10,14 @@ import { useState } from "react";
 import SignInPage from "./pages/SignInPage";
 import SignUpPage from "./pages/SignUpPage";
 import ProtectedRoute from "./utils/ProtectedRoute";
+import CreateSubplacePage from "./pages/CreateSubplacePage";
+import AllSubplacesFeed from "./pages/AllSubplacesFeed";
+import Subplace from "./components/SubplacePage/Subplace";
+import SubplacePage from "./pages/SubplacePage";
 
 function App() {
   const [cachedPosts, setCachedPosts] = useState(null);
+  const [cachedSubplaces, setCachedSubplaces] = useState(null);
 
   const router = createBrowserRouter([
     {
@@ -45,7 +50,9 @@ function App() {
             <div className="container mt-4" style={{ width: "1000px" }}>
               <div className="row justify-content-center">
                 <div className="col-lg-6">
-                  <CreatePostPage />
+                  <ProtectedRoute>
+                    <CreatePostPage />
+                  </ProtectedRoute>
                 </div>
               </div>
             </div>
@@ -85,6 +92,53 @@ function App() {
               <div className="row justify-content-center">
                 <div className="col-lg-6">
                   <SignUpPage />
+                </div>
+              </div>
+            </div>
+          ),
+        },
+        {
+          path: "createSubplace",
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-6">
+                  <ProtectedRoute>
+                    <CreateSubplacePage />
+                  </ProtectedRoute>
+                </div>
+              </div>
+            </div>
+          ),
+        },
+        {
+          path: "AllSubplaces",
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-8">
+                  <AllSubplacesFeed
+                    cachedSubplaces={cachedSubplaces}
+                    setCachedSubplaces={setCachedSubplaces}
+                  />
+                </div>
+                <div className="col-lg-4">
+                  <RecentPostsAll />
+                </div>
+              </div>
+            </div>
+          ),
+        },
+        {
+          path: "subplace/:subplaceId",
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-8">
+                  <SubplacePage />
+                </div>
+                <div className="col-lg-4">
+                  <RecentPostsAll />
                 </div>
               </div>
             </div>

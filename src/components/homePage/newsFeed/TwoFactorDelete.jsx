@@ -10,7 +10,7 @@ const TwoFactorDelete = ({ onClose, onConfirm }) => {
     onClose();
   };
   const bodyText =
-    "Are you sure you want to delete this post? This action cannot be undone.";
+    "Are you sure you want to delete? This action cannot be undone.";
   const buttonText = "Delete";
   const headerText = "Are you sure?";
 

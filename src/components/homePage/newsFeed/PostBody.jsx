@@ -20,6 +20,7 @@ const PostBody = ({
   userId,
   edited,
   onRequestDelete,
+  answerCount,
 }) => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -98,6 +99,7 @@ const PostBody = ({
           userId={userId}
           isEditing={isEditing}
           onRequestDelete={onRequestDelete}
+          answerCount={answerCount}
         />
       </div>
     </div>

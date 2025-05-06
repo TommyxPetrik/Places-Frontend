@@ -4,15 +4,15 @@ const CreatePostPageButton = () => {
   //   const navigate = useNavigate();
 
   //   const handleClick = () => {
-  //     navigate("/create");
+  //     navigate("/profile");
   //   };
 
   return (
-    <button
-      className="btn btn-outline-dark"
-      //   onClick={handleClick}
-    >
-      👤
+    <button className="btn">
+      <i
+        className="bi bi-person-circle"
+        style={{ fontSize: "1.5rem", color: "cornflowerblue" }}
+      ></i>
     </button>
   );
 };

@@ -1,11 +1,11 @@
 import React from "react";
 import { useNavigate } from "react-router-dom";
 
-const PostCommentsButton = ({ postId, answerCount }) => {
+const SubplacePostsButton = ({ subplaceId, questionCount }) => {
   const navigate = useNavigate();
 
   const handleClick = () => {
-    navigate(`/post/${postId}`);
+    navigate(`/subplace/${subplaceId}`);
   };
   return (
     <>
@@ -16,11 +16,11 @@ const PostCommentsButton = ({ postId, answerCount }) => {
         ></i>
         <span style={{ fontSize: "0.8rem", color: "white" }}>
           {" "}
-          {answerCount}
+          {questionCount}
         </span>
       </button>
     </>
   );
 };
 
-export default PostCommentsButton;
+export default SubplacePostsButton;
