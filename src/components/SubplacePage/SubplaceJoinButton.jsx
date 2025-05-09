@@ -1,18 +1,14 @@
 import React from "react";
 
-const SubplaceJoinButton = ({ onClick, isActive }) => {
+const SubplaceJoinButton = ({ onClick, isActive, disabled }) => {
   return (
-    <>
-      <button
-        onClick={onClick}
-        className={`btn btn-outline-secondary ${isActive ? "active" : ""}`}
-      >
-        <i
-          className="bi bi-plus-circle"
-          style={{ fontSize: "1rem", color: "cornflowerblue" }}
-        ></i>
-      </button>
-    </>
+    <button
+      onClick={onClick}
+      disabled={disabled}
+      className={`btn btn-outline-secondary ${isActive ? "active" : ""}`}
+    >
+      {isActive ? "Leave" : "Join"}
+    </button>
   );
 };
 

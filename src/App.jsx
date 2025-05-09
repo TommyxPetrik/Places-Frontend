@@ -12,8 +12,9 @@ import SignUpPage from "./pages/SignUpPage";
 import ProtectedRoute from "./utils/ProtectedRoute";
 import CreateSubplacePage from "./pages/CreateSubplacePage";
 import AllSubplacesFeed from "./pages/AllSubplacesFeed";
-import Subplace from "./components/SubplacePage/Subplace";
 import SubplacePage from "./pages/SubplacePage";
+import SubplaceInfoSidebar from "./components/SubplacePage/SubplaceInfoSidebar";
+import UserProfile from "./pages/ProfilePage";
 
 function App() {
   const [cachedPosts, setCachedPosts] = useState(null);
@@ -138,7 +139,19 @@ function App() {
                   <SubplacePage />
                 </div>
                 <div className="col-lg-4">
-                  <RecentPostsAll />
+                  <SubplaceInfoSidebar />
+                </div>
+              </div>
+            </div>
+          ),
+        },
+        {
+          path: "profile/:userId",
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-12">
+                  <UserProfile />
                 </div>
               </div>
             </div>

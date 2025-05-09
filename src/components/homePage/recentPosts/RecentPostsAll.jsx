@@ -1,36 +1,32 @@
 import React, { useState, useEffect, use } from "react";
 import RecentPost from "./RecentPost";
 import { formatDistanceToNow } from "date-fns";
+import { useAuth } from "../../context/AuthContext";
 
 const RecentPostsAll = () => {
   const [loading, setLoading] = useState(true);
-  const [cachedPosts, setCachedposts] = useState(null);
-  const [posts, setPosts] = useState(cachedPosts || []);
+  const [posts, setPosts] = useState([]);
+  const { user } = useAuth();
+  const token = user?.token;
 
   useEffect(() => {
-    if (cachedPosts) {
-      setLoading(false);
-    }
-    if (!cachedPosts) {
-      setLoading(true);
-      const fetchPosts = async () => {
-        try {
-          const response = await fetch(
-            "http://localhost:3000/public/sortQuestions?order=des&sort=createdAt&limit=10"
-          );
-          const data = await response.json();
-          setPosts(data);
-          setCachedposts(data);
-        } catch (error) {
-          console.error("Error fetching posts:", error.mesage);
-        } finally {
-          setLoading(false);
-        }
-      };
+    setLoading(true);
+    const fetchPosts = async () => {
+      try {
+        const response = await fetch(
+          "http://localhost:3000/public/sortQuestions?order=des&sort=createdAt&limit=10"
+        );
+        const data = await response.json();
+        setPosts(data);
+      } catch (error) {
+        console.error("Error fetching posts:", error.mesage);
+      } finally {
+        setLoading(false);
+      }
+    };
 
-      fetchPosts();
-    }
-  }, [cachedPosts]);
+    fetchPosts();
+  }, [token]);
 
   return (
     <>

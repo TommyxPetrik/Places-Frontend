@@ -2,19 +2,56 @@ import React, { useState, useEffect, useRef } from "react";
 import { useLocation } from "react-router-dom";
 import { formatDistanceToNow } from "date-fns";
 import Subplace from "../components/SubplacePage/Subplace";
+import { useAuth } from "../components/context/AuthContext";
+import SignInError from "../components/SignInSignUpPage/SignInError";
 
 const AllSubplacesFeed = ({ cachedSubplaces, setCachedSubplaces }) => {
   const [subplaces, setSubplaces] = useState(cachedSubplaces || []);
+  const [joinedSubplaces, setJoinedSubplaces] = useState([]);
+  const [showModal, setShowModal] = useState(false);
+  const openModal = () => setShowModal(true);
   const [loading, setLoading] = useState(true);
   const [page, setPage] = useState(1);
   const [hasMore, setHasMore] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
+  const [loadingJoined, setLoadingJoined] = useState(true);
   const location = useLocation();
+  const { user } = useAuth();
+  const token = user?.token;
+
+  const fetchUserJoinedSubplaces = async () => {
+    if (!token) {
+      setJoinedSubplaces([]);
+      setLoadingJoined(false);
+      return;
+    }
+    try {
+      const res = await fetch(
+        "http://localhost:3000/users/getJoinedSublacesId",
+        {
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        setJoinedSubplaces(data);
+      } else {
+        setJoinedSubplaces([]);
+      }
+    } catch (err) {
+      console.error("Error fetching joined subplaces:", err.message);
+      setJoinedSubplaces([]);
+    } finally {
+      setLoadingJoined(false);
+    }
+  };
 
   const fetchData = async (append = false) => {
     if (!append) setLoading(true);
     setIsFetching(true);
-
     try {
       const res = await fetch(
         `http://localhost:3000/public/subplacefeed?page=${page}&limit=10`
@@ -47,12 +84,19 @@ const AllSubplacesFeed = ({ cachedSubplaces, setCachedSubplaces }) => {
   };
 
   useEffect(() => {
+    fetchUserJoinedSubplaces();
     if (!cachedSubplaces || cachedSubplaces.length === 0) {
       fetchData();
     } else {
       setLoading(false);
     }
   }, [location.pathname]);
+
+  useEffect(() => {
+    if (token) {
+      fetchUserJoinedSubplaces();
+    }
+  }, [token]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -79,7 +123,8 @@ const AllSubplacesFeed = ({ cachedSubplaces, setCachedSubplaces }) => {
 
   return (
     <div>
-      {loading ? (
+      {showModal && <SignInError setShowModal={setShowModal} />}
+      {loading || loadingJoined ? (
         <div className="d-flex justify-content-center my-3">
           <div className="spinner-border" role="status">
             <span className="visually-hidden">Loading...</span>
@@ -97,10 +142,13 @@ const AllSubplacesFeed = ({ cachedSubplaces, setCachedSubplaces }) => {
               addSuffix: true,
             })}
             tags={sub.tags}
-            voteStatus={null}
+            joinStatus={joinedSubplaces}
+            onRequireLogin={openModal}
+            creator={sub.creator}
           />
         ))
       )}
+
       {!loading && !hasMore && (
         <div className="text-center my-3 text-white">
           <p>Žiadne ďalšie subplaces na načítanie.</p>

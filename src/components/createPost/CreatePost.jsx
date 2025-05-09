@@ -5,6 +5,7 @@ import QuestionBody from "../createPost/QuestionBody";
 import SelectTags from "../createPost/SelectTags";
 import CreatePostFormButton from "../createPost/CreatePostFormButton";
 import { useAuth } from "../context/AuthContext";
+import { useNavigate } from "react-router-dom";
 
 const CreatePost = () => {
   const [selectedSubplace, setSelectedSubplace] = useState("");
@@ -24,6 +25,7 @@ const CreatePost = () => {
   const [allSubplaces, setAllSubplaces] = useState([]);
   const { user } = useAuth();
   const token = user?.token;
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchSubplaces = async () => {
@@ -146,6 +148,24 @@ const CreatePost = () => {
       });
 
       if (!res.ok) throw new Error("Failed to create post");
+
+      const fetchCreated = await fetch(
+        `http://localhost:3000/questions/title?title=${questiontitle}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+      const createdQuestion = await fetchCreated.json();
+
+      if (createdQuestion && createdQuestion._id) {
+        navigate(`/post/${createdQuestion._id}`);
+      } else {
+        console.error("Question not found after creation");
+      }
     } catch (err) {
       console.error("Error:", err.message);
     }

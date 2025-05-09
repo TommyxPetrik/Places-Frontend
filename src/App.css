@@ -88,6 +88,12 @@ body {
   margin-right: -0.7rem;
 }
 
+.subplace-sidebar {
+  scrollbar-width: thin;
+  overflow: hidden;
+  height: 90vh;
+}
+
 .white-placeholder::placeholder {
   color: white;
   opacity: 0.5;

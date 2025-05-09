@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useRef } from "react";
+import React, { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import Post from "../components/homePage/newsFeed/Post";
 import { formatDistanceToNow } from "date-fns";
@@ -13,10 +13,33 @@ const SubplacePage = () => {
   const [hasMore, setHasMore] = useState(true);
   const [loading, setLoading] = useState(true);
   const [isFetching, setIsFetching] = useState(false);
-  const [userVotes, setUserVotes] = useState();
   const [showModal, setShowModal] = useState(false);
+  const [subplace, setSubplace] = useState(null);
   const { user } = useAuth();
   const token = user?.token;
+
+  useEffect(() => {
+    const fetchSubplace = async () => {
+      if (!subplaceId) return;
+      try {
+        const res = await fetch(
+          `http://localhost:3000/public/subplace/${subplaceId}`,
+          {
+            headers: {
+              "x-access-token": token,
+            },
+          }
+        );
+        if (!res.ok) throw new Error("Failed to fetch subplace info");
+        const data = await res.json();
+        setSubplace(data);
+      } catch (err) {
+        console.error("Error fetching subplace info:", err.message);
+      }
+    };
+
+    fetchSubplace();
+  }, [token, subplaceId]);
 
   const fetchUserVotes = async () => {
     if (!token) return null;
@@ -45,29 +68,15 @@ const SubplacePage = () => {
 
       const rawPosts = await res.json();
 
-      const enrichedPosts = await Promise.all(
-        rawPosts.map(async (p) => {
-          try {
-            const single = await fetch(
-              `http://localhost:3000/public/questions/${p._id}`
-            );
-            const freshPost = await single.json();
+      const enrichedPosts = rawPosts.map((post) => {
+        const voteStatus = voteData?.questionVotes?.upvoted.includes(post._id)
+          ? "upvoted"
+          : voteData?.questionVotes?.downvoted.includes(post._id)
+          ? "downvoted"
+          : null;
 
-            const voteStatus = voteData?.questionVotes?.upvoted.includes(
-              freshPost._id
-            )
-              ? "upvoted"
-              : voteData?.questionVotes?.downvoted.includes(freshPost._id)
-              ? "downvoted"
-              : null;
-
-            return { ...freshPost, voteStatus };
-          } catch (err) {
-            console.error("Error enriching post:", err.message);
-            return { ...p, voteStatus: null };
-          }
-        })
-      );
+        return { ...post, voteStatus };
+      });
 
       setPosts((prev) =>
         append
@@ -89,9 +98,39 @@ const SubplacePage = () => {
     }
   };
 
+  const handlePostUpdate = async (updatedPost) => {
+    try {
+      const freshVotes = await fetchUserVotes();
+
+      const voteStatus = freshVotes?.questionVotes?.upvoted.includes(
+        updatedPost._id
+      )
+        ? "upvoted"
+        : freshVotes?.questionVotes?.downvoted.includes(updatedPost._id)
+        ? "downvoted"
+        : null;
+
+      const updatedWithStatus = { ...updatedPost, voteStatus };
+
+      setPosts((prev) =>
+        prev.map((post) =>
+          post._id === updatedPost._id ? updatedWithStatus : post
+        )
+      );
+    } catch (err) {
+      console.error("Error updating post votes:", err.message);
+    }
+  };
+
   useEffect(() => {
     fetchPosts();
   }, [subplaceId]);
+
+  useEffect(() => {
+    if (token) {
+      fetchPosts();
+    }
+  }, [token]);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -112,24 +151,9 @@ const SubplacePage = () => {
     if (page > 1) fetchPosts(true);
   }, [page]);
 
-  const handlePostUpdate = (updatedPost) => {
-    setPosts((prev) =>
-      prev.map((post) =>
-        post._id === updatedPost._id ? { ...updatedPost } : post
-      )
-    );
-  };
-
   return (
     <div>
       {showModal && <SignInError onClose={() => setShowModal(false)} />}
-      {!loading && posts.length > 0 && (
-        <div className="text-center my-4">
-          <h2 className="text-white fw-bold">
-            Subplace: {posts[0].subplace?.name}
-          </h2>
-        </div>
-      )}
       <div className="" style={{ display: "flex" }}>
         <SubplacePageBackButton />
       </div>
@@ -138,30 +162,38 @@ const SubplacePage = () => {
           <div className="spinner-border" role="status" />
         </div>
       ) : (
-        posts.map((post) => (
-          <Post
-            key={post._id}
-            postId={post._id}
-            subplace={post.subplace?.name}
-            username={post.userid?.name}
-            time={formatDistanceToNow(new Date(post.createdAt), {
-              addSuffix: true,
-            })}
-            tags={post.tags}
-            questiontitle={post.title}
-            questionbody={post.body}
-            upvotes={post.upvotes}
-            onPostUpdated={handlePostUpdate}
-            voteStatus={post.voteStatus}
-            onRequireLogin={() => setShowModal(true)}
-            edited={post.edited}
-            answerCount={post.answers.length}
-          />
-        ))
+        <>
+          <div className="mt-5 text-white">
+            {subplace ? (
+              <h2 className="mb-3">{subplace.name}</h2>
+            ) : (
+              <h2 className="mb-3">Loading subplace...</h2>
+            )}
+          </div>
+          {posts.map((post) => (
+            <Post
+              key={post._id}
+              postId={post._id}
+              subplace={post.subplace?.name}
+              username={post.username}
+              time={formatDistanceToNow(new Date(post.createdAt), {
+                addSuffix: true,
+              })}
+              tags={post.tags}
+              questiontitle={post.title}
+              questionbody={post.body}
+              upvotes={post.upvotes}
+              onPostUpdated={handlePostUpdate}
+              voteStatus={post.voteStatus}
+              edited={post.edited}
+              answerCount={post.answerCount}
+            />
+          ))}
+        </>
       )}
       {!loading && !hasMore && (
         <div className="text-center my-3 text-white">
-          <p>Žiadne ďalšie príspevky v tomto subplace.</p>
+          <p>Žiadne ďalšie príspevky na načítanie.</p>
         </div>
       )}
     </div>

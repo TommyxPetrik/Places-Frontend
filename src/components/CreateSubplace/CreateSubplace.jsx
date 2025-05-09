@@ -90,29 +90,37 @@ const CreateSubplace = () => {
           "x-access-token": token,
         },
         body: JSON.stringify({
-          name: `s/${name}`,
+          name,
           description,
           tags,
         }),
       });
 
-      // const subplace = await fetch(
-      //   `http://localhost:3000/subplace/name?name=${name}`,
-      //   {
-      //     method: "GET",
-      //     headers: {
-      //       "Content-Type": "application/json",
-      //       "x-access-token": token,
-      //     },
-      //   }
-      // );
-
-      if (response.ok) {
-        const data = await response.json();
-        // navigate("/");
-      } else {
+      if (!response.ok) {
         console.error("Failed to create subplace");
+        return;
       }
+
+      const fetchResponse = await fetch(
+        `http://localhost:3000/subplace/name?name=${name}`,
+        {
+          method: "GET",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (!fetchResponse.ok) {
+        console.error("Failed to fetch subplace by name");
+        return;
+      }
+
+      const subplace = await fetchResponse.json();
+      console.log(subplace._id);
+
+      navigate(`/subplace/${subplace._id}`);
     } catch (err) {
       console.error("Error:", err);
     }

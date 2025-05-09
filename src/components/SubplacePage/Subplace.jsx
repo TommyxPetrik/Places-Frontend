@@ -5,10 +5,12 @@ const Subplace = ({
   subplace,
   time,
   tags,
-  voteStatus,
+  joinStatus,
   description,
   subplaceId,
   questionCount,
+  onRequireLogin,
+  creator,
 }) => {
   return (
     <>
@@ -32,10 +34,12 @@ const Subplace = ({
           subplaceName={subplace}
           time={time}
           tags={tags}
-          voteStatus={voteStatus}
+          joinStatus={joinStatus}
           description={description}
           subplaceId={subplaceId}
           questionCount={questionCount}
+          onRequireLogin={onRequireLogin}
+          creator={creator}
         />
       </div>
     </>

@@ -1,103 +1,194 @@
-import React from "react";
-import { useState } from "react";
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import SignUpUsername from "../components/SignInSignUpPage/SignUpUsername";
+import SignUpEmail from "../components/SignInSignUpPage/SignUpEmail";
+import SignUpPasswords from "../components/SignInSignUpPage/SignUpPasswords";
+import SignUpButton from "../components/SignInSignUpPage/SignUpButton";
+import SignUpTos from "../components/SignInSignUpPage/SignUpTos";
+import DateOfBirth from "../components/SignInSignUpPage/DateOfBirth";
 
 const SignUpPage = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [repeatPassword, setRepeatPassword] = useState("");
   const [checked, setChecked] = useState(false);
+  const [usernameError, setUsernameError] = useState("");
+  const [emailError, setEmailError] = useState("");
+  const [passwordError, setPasswordError] = useState("");
+  const [repeatPasswordError, setRepeatPasswordError] = useState("");
+  const [tosError, setTosError] = useState("");
+  const [dob, setDob] = useState("");
+  const [dobError, setDobError] = useState("");
 
-  const handleSubmit = (e) => {
-    e.target;
+  const navigate = useNavigate();
+
+  const validateUsername = () => {
+    if (!username.trim()) {
+      setUsernameError("Username is required.");
+    } else if (username.length < 3 || username.length > 20) {
+      setUsernameError("Username must be between 3 and 20 characters.");
+    } else if (/[^a-zA-Z0-9]/.test(username)) {
+      setUsernameError("Username cannot contain special characters or spaces.");
+    } else {
+      setUsernameError("");
+    }
   };
+
+  const validateEmail = () => {
+    const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!email.trim()) {
+      setEmailError("Email is required.");
+    } else if (!emailRegex.test(email)) {
+      setEmailError("Please enter a valid email.");
+    } else {
+      setEmailError("");
+    }
+  };
+
+  const validatePassword = () => {
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    if (!password) {
+      setPasswordError("Password is required.");
+    } else if (!passwordRegex.test(password)) {
+      setPasswordError(
+        "Password must be at least 8 characters, include one uppercase letter and one number."
+      );
+    } else {
+      setPasswordError("");
+    }
+  };
+
+  const validateRepeatPassword = () => {
+    if (password !== repeatPassword) {
+      setRepeatPasswordError("Passwords do not match.");
+    } else {
+      setRepeatPasswordError("");
+    }
+  };
+
+  const validateTos = () => {
+    if (!checked) {
+      setTosError("You must agree to the Terms of Service.");
+    } else {
+      setTosError("");
+    }
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+
+    validateUsername();
+    validateEmail();
+    validatePassword();
+    validateRepeatPassword();
+    validateTos();
+    validateDob();
+
+    if (
+      usernameError ||
+      emailError ||
+      passwordError ||
+      repeatPasswordError ||
+      tosError ||
+      dobError
+    )
+      return;
+
+    try {
+      const age = calculateAge(dob);
+      const response = await fetch("http://localhost:3000/public/SignUp", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+
+        body: JSON.stringify({
+          name: username,
+          email,
+          password,
+          password_repeat: repeatPassword,
+          age,
+        }),
+      });
+
+      if (response.ok) {
+        navigate("/SignIn");
+      } else {
+        console.error("Failed to sign up.");
+      }
+    } catch (error) {
+      console.error("Error during sign up:", error.message);
+    }
+  };
+
+  const calculateAge = (birthDate) => {
+    const today = new Date();
+    const birth = new Date(birthDate);
+    let age = today.getFullYear() - birth.getFullYear();
+    const m = today.getMonth() - birth.getMonth();
+    if (m < 0 || (m === 0 && today.getDate() < birth.getDate())) {
+      age--;
+    }
+    return age;
+  };
+
+  const validateDob = () => {
+    if (!dob) {
+      setDobError("Date of birth is required.");
+    } else {
+      setDobError("");
+    }
+  };
+
   return (
-    <>
-      <form onSubmit={handleSubmit}>
-        <div class="mb-3">
-          <label
-            for="exampleFormControlTextarea1"
-            class="form-label text-white d-flex"
-          >
-            Username
-          </label>
-          <textarea
-            class="form-control"
-            id="exampleFormControlTextarea1"
-            rows="1"
-            placeholder="Username"
-          ></textarea>
-        </div>
-        <div className="mb-3">
-          <label
-            htmlFor="exampleInputEmail1"
-            className="form-label text-white d-flex"
-          >
-            Email address
-          </label>
+    <form onSubmit={handleSubmit}>
+      <SignUpUsername
+        value={username}
+        setValue={setUsername}
+        error={usernameError}
+        onBlur={validateUsername}
+      />
+      <SignUpEmail
+        value={email}
+        setValue={setEmail}
+        error={emailError}
+        onBlur={validateEmail}
+      />
+      <SignUpPasswords
+        password={password}
+        repeatPassword={repeatPassword}
+        setPassword={setPassword}
+        setRepeatPassword={setRepeatPassword}
+        passwordError={passwordError}
+        repeatPasswordError={repeatPasswordError}
+        onPasswordBlur={validatePassword}
+        onRepeatPasswordBlur={validateRepeatPassword}
+      />
 
-          <input
-            type="email"
-            className="form-control"
-            id="exampleInputEmail1"
-            aria-describedby="emailHelp"
-            placeholder="Email adress"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-          />
-        </div>
-        <div className="mb-3">
-          <label
-            htmlFor="exampleInputPassword1"
-            className="form-label text-white d-flex"
-          >
-            Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="exampleInputPassword1"
-            placeholder="Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
+      <DateOfBirth
+        dob={dob}
+        setDob={setDob}
+        error={dobError}
+        onBlur={validateDob}
+      />
 
-        <div className="mb-3">
-          <label
-            htmlFor="exampleInputPassword1"
-            className="form-label text-white d-flex"
-          >
-            Repeat Password
-          </label>
-          <input
-            type="password"
-            className="form-control"
-            id="repeatpassword"
-            placeholder="Repeat Password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-          />
-        </div>
-
-        <div className="mb-3 form-check d-flex gap-2 justify-content-center">
-          <input
-            type="checkbox"
-            className="form-check-input"
-            id="exampleCheck1"
-            checked={checked}
-            onChange={(e) => setChecked(e.target.checked)}
-          />
-          <label
-            className="form-check-label text-white"
-            htmlFor="exampleCheck1"
-          >
-            I agree to the Terms of Service
-          </label>
-        </div>
-        <button type="submit" className="btn btn-primary">
-          Sign In
-        </button>
-      </form>
-    </>
+      <SignUpTos
+        checked={checked}
+        setChecked={setChecked}
+        error={tosError}
+        onBlur={validateTos}
+      />
+      <SignUpButton
+        disabled={
+          !!usernameError ||
+          !!emailError ||
+          !!passwordError ||
+          !!repeatPasswordError ||
+          !!tosError
+        }
+      />
+    </form>
   );
 };
 

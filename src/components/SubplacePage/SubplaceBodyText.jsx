@@ -1,10 +1,19 @@
 import React from "react";
 import PostTags from "../homePage/newsFeed/PostTags";
 
-const SubplaceBodyText = ({ time, tags, subplaceName, description }) => {
+const SubplaceBodyText = ({
+  time,
+  tags,
+  subplaceName,
+  description,
+  creator,
+}) => {
   return (
     <>
       <div className="d-flex align-items-center mb-1">
+        <span className="text-white opacity-50" style={{ fontSize: "0.8rem" }}>
+          {creator.name}
+        </span>
         <span
           className="text-white opacity-50"
           style={{ marginLeft: "0.5rem", fontSize: "0.8rem" }}

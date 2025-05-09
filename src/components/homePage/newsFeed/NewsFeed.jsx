@@ -265,7 +265,7 @@ const NewsFeed = ({ cachedPosts, setCachedPosts }) => {
 
   return (
     <div>
-      {showModal && <SignInError onClose={() => setShowModal(false)} />}
+      {showModal && <SignInError setShowModal={setShowModal} />}
       {loading ? (
         <div className="d-flex justify-content-center my-3">
           <div className="spinner-border" role="status">
@@ -291,7 +291,7 @@ const NewsFeed = ({ cachedPosts, setCachedPosts }) => {
             voteStatus={post.voteStatus}
             onRequireLogin={openModal}
             edited={post.edited}
-            answerCount={post.answers.length}
+            answerCount={post.answerCount}
           />
         ))
       )}

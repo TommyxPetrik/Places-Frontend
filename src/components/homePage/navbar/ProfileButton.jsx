@@ -1,14 +1,18 @@
 import { useNavigate } from "react-router-dom";
+import React from "react";
+import { useAuth } from "../../context/AuthContext";
 
 const CreatePostPageButton = () => {
-  //   const navigate = useNavigate();
+  const { user } = useAuth();
+  const token = user?.token;
+  const navigate = useNavigate();
 
-  //   const handleClick = () => {
-  //     navigate("/profile");
-  //   };
+  const handleClick = () => {
+    navigate(`/profile/${user?.id}`);
+  };
 
   return (
-    <button className="btn">
+    <button onClick={handleClick} className="btn">
       <i
         className="bi bi-person-circle"
         style={{ fontSize: "1.5rem", color: "cornflowerblue" }}

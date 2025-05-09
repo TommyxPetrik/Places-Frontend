@@ -4,7 +4,7 @@ const SelectSubplace = ({ value, onChange, onBlur, error, options }) => {
   return (
     <div className="mb-3">
       <label htmlFor="subplace" className="form-label text-white">
-        Select Subplace
+        Select one of your joined subplaces
       </label>
       <select
         className={`form-select ${error ? "is-invalid" : ""}`}

@@ -13,7 +13,7 @@ const SelectTags = ({
     <>
       <div className="mt-3">
         <label htmlFor="tags" className="form-label text-white">
-          Create tags for your subplace (add at least 3 tags)
+          Create tags for your subplace (add at least 1 tag)
         </label>
         <div className="align-items-center d-flex justify-content-center gap-2 mb-3">
           <select

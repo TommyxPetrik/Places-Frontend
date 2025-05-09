@@ -203,7 +203,7 @@ const Postpage = () => {
 
   return (
     <div>
-      {showModal && <SignInError onClose={() => setShowModal(false)} />}
+      {showModal && <SignInError setShowModal={setShowModal} />}
       {showDeleteModalPost && (
         <TwoFactorDelete
           onClose={() => setShowDeleteModalPost(false)}
@@ -250,6 +250,7 @@ const Postpage = () => {
               onRequireLogin={openModal}
               userId={post.userid?._id}
               edited={post.edited}
+              answerCount={post.answerCount}
               onRequestDelete={() => openPostDeleteModal(post._id)}
             />
             <div className="" style={{ display: "flex" }}>

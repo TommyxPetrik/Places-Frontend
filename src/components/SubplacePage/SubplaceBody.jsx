@@ -9,11 +9,13 @@ import SubplaceBodyText from "./SubplaceBodyText";
 const SubplaceBody = ({
   time,
   tags,
-  voteStatus,
+  joinStatus,
   subplaceId,
   description,
   subplaceName,
   questionCount,
+  onRequireLogin,
+  creator,
 }) => {
   const navigate = useNavigate();
 
@@ -33,13 +35,16 @@ const SubplaceBody = ({
           time={time}
           description={description}
           tags={tags}
+          creator={creator}
         />
       </div>
       <div>
         <SubplaceFooter
           subplaceId={subplaceId}
-          voteStatus={voteStatus}
+          joinStatus={joinStatus}
           questionCount={questionCount}
+          onRequireLogin={onRequireLogin}
+          creator={creator}
         />
       </div>
     </div>
