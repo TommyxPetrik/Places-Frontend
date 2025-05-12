@@ -230,7 +230,8 @@ const Postpage = () => {
             <Post
               key={post._id}
               postId={post._id}
-              subplace={post.subplace.name}
+              subplaceName={post.subplace.name}
+              subplaceModerators={post.subplace.moderators}
               username={post.userid.name}
               time={formatDistanceToNow(new Date(post.createdAt), {
                 addSuffix: true,
@@ -276,9 +277,9 @@ const Postpage = () => {
                   onAnswerCreated={handleVoteChange}
                   userVotes={answerVotes}
                   onRequireLogin={openModal}
-                  userId={answer.userid}
                   onAnswerUpdated={fetchAnswers}
                   onRequestDelete={openAnswerDeleteModal}
+                  subplaceModerators={post.subplace.moderators}
                 />
               ))}
             </div>

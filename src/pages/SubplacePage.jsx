@@ -5,6 +5,8 @@ import { formatDistanceToNow } from "date-fns";
 import { useAuth } from "../components/context/AuthContext";
 import SignInError from "../components/SignInSignUpPage/SignInError";
 import SubplacePageBackButton from "../components/SubplacePage/SubplacePageBackButton";
+import SubplaceJoinButton from "../components/SubplacePage/SubplaceJoinButton";
+import CreatePosSubplacePageButton from "../components/SubplacePage/CreatePostSubplaceButton";
 
 const SubplacePage = () => {
   const { subplaceId } = useParams();
@@ -15,10 +17,44 @@ const SubplacePage = () => {
   const [isFetching, setIsFetching] = useState(false);
   const [showModal, setShowModal] = useState(false);
   const [subplace, setSubplace] = useState(null);
+  const [isJoined, setIsJoined] = useState(false);
+  const [joinedSubplaces, setJoinedSubplaces] = useState([]);
+  const [loadingJoined, setLoadingJoined] = useState(true);
   const { user } = useAuth();
   const token = user?.token;
 
+  const fetchUserJoinedSubplaces = async () => {
+    if (!token) {
+      setJoinedSubplaces([]);
+      setLoadingJoined(false);
+      return;
+    }
+    try {
+      const res = await fetch(
+        "http://localhost:3000/users/getJoinedSublacesId",
+        {
+          headers: {
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (res.ok) {
+        const data = await res.json();
+        setJoinedSubplaces(data);
+      } else {
+        setJoinedSubplaces([]);
+      }
+    } catch (err) {
+      console.error("Error fetching joined subplaces:", err.message);
+      setJoinedSubplaces([]);
+    } finally {
+      setLoadingJoined(false);
+    }
+  };
+
   useEffect(() => {
+    fetchUserJoinedSubplaces();
     const fetchSubplace = async () => {
       if (!subplaceId) return;
       try {
@@ -124,11 +160,13 @@ const SubplacePage = () => {
 
   useEffect(() => {
     fetchPosts();
+    fetchUserJoinedSubplaces();
   }, [subplaceId]);
 
   useEffect(() => {
     if (token) {
       fetchPosts();
+      fetchUserJoinedSubplaces();
     }
   }, [token]);
 
@@ -151,13 +189,45 @@ const SubplacePage = () => {
     if (page > 1) fetchPosts(true);
   }, [page]);
 
+  const handleJoinToggle = async () => {
+    if (!token) {
+      setShowModal(true);
+      return;
+    }
+    const endpoint = isJoined ? "leave" : "join";
+    try {
+      const response = await fetch(
+        `http://localhost:3000/subplace/${endpoint}/${subplaceId}`,
+        {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "x-access-token": token,
+          },
+        }
+      );
+
+      if (response.ok) {
+        setIsJoined(!isJoined);
+      } else {
+        console.error(`Failed to ${endpoint} subplace.`);
+      }
+    } catch (error) {
+      console.error(`Error while trying to ${endpoint} subplace:`, error);
+    }
+  };
+
+  useEffect(() => {
+    setIsJoined(joinedSubplaces?.includes(subplaceId));
+  }, [joinedSubplaces, subplaceId]);
+
   return (
     <div>
-      {showModal && <SignInError onClose={() => setShowModal(false)} />}
+      {showModal && <SignInError setShowModal={setShowModal} />}
       <div className="" style={{ display: "flex" }}>
         <SubplacePageBackButton />
       </div>
-      {loading ? (
+      {loading || loadingJoined ? (
         <div className="d-flex justify-content-center my-3">
           <div className="spinner-border" role="status" />
         </div>
@@ -170,11 +240,19 @@ const SubplacePage = () => {
               <h2 className="mb-3">Loading subplace...</h2>
             )}
           </div>
+          <div className="d-flex justify-content-center gap-2">
+            <CreatePosSubplacePageButton />
+            <SubplaceJoinButton
+              onClick={handleJoinToggle}
+              isActive={isJoined}
+              disabled={subplace?.creator?._id === user?.id}
+            />
+          </div>
           {posts.map((post) => (
             <Post
               key={post._id}
               postId={post._id}
-              subplace={post.subplace?.name}
+              subplaceName={post.subplace?.name}
               username={post.username}
               time={formatDistanceToNow(new Date(post.createdAt), {
                 addSuffix: true,

@@ -47,12 +47,12 @@ const SignUpPage = () => {
   };
 
   const validatePassword = () => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{8,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{10,}$/;
     if (!password) {
       setPasswordError("Password is required.");
     } else if (!passwordRegex.test(password)) {
       setPasswordError(
-        "Password must be at least 8 characters, include one uppercase letter and one number."
+        "Password must be at least 10 characters, include one uppercase letter and one number."
       );
     } else {
       setPasswordError("");

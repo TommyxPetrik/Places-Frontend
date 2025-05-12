@@ -76,7 +76,7 @@ const CreatePost = () => {
   const handleRemoveTag = (tagToRemove) => {
     const updated = tags.filter((t) => t !== tagToRemove);
     setTags(updated);
-    if (updated.length < 3) setTagsError("Please select at least 3 tags.");
+    if (updated.length < 1) setTagsError("Please select at least 1 tag.");
   };
 
   const handleSubplaceBlur = () => {

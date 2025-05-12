@@ -3,6 +3,7 @@ import AnswerBody from "./AnswerBody";
 
 const Answer = ({
   body,
+  answer,
   username,
   upvotes,
   onClick,
@@ -15,6 +16,7 @@ const Answer = ({
   onAnswerUpdated,
   edited,
   onRequestDelete,
+  subplaceModerators,
 }) => {
   return (
     <>
@@ -41,10 +43,11 @@ const Answer = ({
           onAnswerCreated={onAnswerCreated}
           voteStatus={voteStatus}
           onRequireLogin={onRequireLogin}
-          userId={userId}
+          userId={answer.userid}
           onAnswerUpdated={onAnswerUpdated}
           edited={edited}
           onRequestDelete={onRequestDelete}
+          subplaceModerators={subplaceModerators}
         />
       </div>
     </>

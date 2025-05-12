@@ -7,16 +7,18 @@ import SignInButton from "./SignInButton";
 import SignUpButton from "./SignUpButton";
 import { useAuth } from "../../context/AuthContext";
 import SignoutButton from "./SignoutButton";
+import AdminPanelButton from "./AdminPanel";
 
 const NavbarIcons = () => {
-  const { user, logout } = useAuth();
+  const { user } = useAuth();
+
   return (
-    <div className="d-flex gap-2">
+    <div className="d-flex gap-2 align-items-center">
       {user ? (
         <>
+          {user.role === "admin" && <AdminPanelButton />}
           <CreatePostPageButton />
           <SignoutButton />
-          <BellButton />
           <ProfileButton />
         </>
       ) : (

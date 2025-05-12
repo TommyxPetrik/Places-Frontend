@@ -5,7 +5,9 @@ const SubplaceJoinButton = ({ onClick, isActive, disabled }) => {
     <button
       onClick={onClick}
       disabled={disabled}
-      className={`btn btn-outline-secondary ${isActive ? "active" : ""}`}
+      className={`btn btn-outline-secondary text-white ${
+        isActive ? "active" : ""
+      }`}
     >
       {isActive ? "Leave" : "Join"}
     </button>

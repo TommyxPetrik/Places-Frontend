@@ -21,6 +21,7 @@ const AnswerFooter = ({
   onSave,
   onRequestDelete,
   userId,
+  subplaceModerators,
 }) => {
   const [reply, setReply] = useState(false);
   const { user } = useAuth();
@@ -101,7 +102,9 @@ const AnswerFooter = ({
           />
           <AnswerReplyButton onClick={replyToggle} />
           <AnswerShareButton />
-          {token && user?.id === userId ? (
+          {((token && user?.id === userId) ||
+            user?.role === "admin" ||
+            subplaceModerators.includes(user?.id)) && (
             <>
               <EditAnswerButton
                 onClick={handleEditClick}
@@ -109,7 +112,7 @@ const AnswerFooter = ({
               />
               <AnswerDeleteButton onClick={() => onRequestDelete(answerId)} />
             </>
-          ) : null}
+          )}
         </div>
       </div>
       {reply && (

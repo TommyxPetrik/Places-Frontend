@@ -6,7 +6,8 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
 const PostBody = ({
-  subplace,
+  subplaceName,
+  subplaceModerators,
   username,
   time,
   questiontitle,
@@ -21,6 +22,8 @@ const PostBody = ({
   edited,
   onRequestDelete,
   answerCount,
+  subplaceId,
+  trim,
 }) => {
   const navigate = useNavigate();
   const [isEditing, setIsEditing] = useState(false);
@@ -72,7 +75,7 @@ const PostBody = ({
         style={{ height: "100%", cursor: "pointer", width: "35rem" }}
       >
         <PostBodyText
-          subplace={subplace}
+          subplaceName={subplaceName}
           username={username}
           time={time}
           questiontitle={questiontitle}
@@ -85,11 +88,14 @@ const PostBody = ({
           setEditedTitle={setEditedTitle}
           setEditedBody={setEditedBody}
           edited={edited}
+          subplaceId={subplaceId}
+          trim={trim}
         />
       </div>
       <div>
         <PostFooter
           upvotes={upvotes}
+          subplaceModerators={subplaceModerators}
           postId={postId}
           onPostUpdated={onPostUpdated}
           voteStatus={voteStatus}

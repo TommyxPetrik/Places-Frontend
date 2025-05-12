@@ -9,11 +9,13 @@ import ProfileEmail from "../components/profilePage/ProfileEmail";
 import ProfilePassword from "../components/profilePage/ProfilePassword";
 import ProfileJoinedSubplaces from "../components/profilePage/ProfileJoinedSubplaces";
 import { useNavigate } from "react-router-dom";
+import { useParams } from "react-router-dom";
+import ProfileModeratingSubplaces from "../components/profilePage/Moderating";
 
 const ProfilePage = () => {
   const { user, updateUserContext } = useAuth();
   const navigate = useNavigate();
-  const userId = user?.id;
+  const { userId } = useParams();
   const token = user?.token;
 
   const [userData, setUserData] = useState(null);
@@ -58,8 +60,8 @@ const ProfilePage = () => {
       if (!res.ok) throw new Error("Failed to fetch user");
       const data = await res.json();
       setUserData(data);
-      setEditedName(data.name || ""); // Inicializácia pre editáciu
-      setEditedEmail(data.email || ""); // Inicializácia pre editáciu
+      setEditedName(data.name || "");
+      setEditedEmail(data.email || "");
     } catch (err) {
       console.error("Fetch user error:", err);
       triggerToast("Failed to load user data", "danger");
@@ -70,7 +72,6 @@ const ProfilePage = () => {
     fetchUser();
   }, [fetchUser]);
 
-  // Validačné funkcie (zostávajú v ProfilePage, lebo ich používajú aj save handlery)
   const validateName = (nameToValidate = editedName) => {
     if (!nameToValidate.trim()) {
       setNameError("Name cannot be empty.");
@@ -150,7 +151,6 @@ const ProfilePage = () => {
 
   const handleConfirmPasswordBlur = () => validateConfirmPassword();
 
-  // Image Handlers
   const handleImageUpload = async (e) => {
     const file = e.target.files[0];
     if (!file) return;
@@ -200,7 +200,6 @@ const ProfilePage = () => {
     }
   };
 
-  // Toggle Handlers
   const handleEditNameToggle = () => {
     setIsEditingName((prev) => !prev);
     if (!isEditingName) {
@@ -232,7 +231,7 @@ const ProfilePage = () => {
     }
     try {
       const response = await fetch(
-        `http://localhost:3000/users/update/${userId}`,
+        `http://localhost:3000/users/changeUsername/${userId}`,
         {
           method: "PUT",
           headers: {
@@ -389,6 +388,15 @@ const ProfilePage = () => {
           />
 
           <ProfileAge age={userData.age} />
+          <ProfileModeratingSubplaces
+            userId={userId}
+            token={token}
+            moderating={userData.moderator || []}
+            allSubplaces={userData.subplaces}
+            userData={userData}
+            fetchUser={fetchUser}
+            user={user}
+          />
         </div>
 
         <ProfileJoinedSubplaces

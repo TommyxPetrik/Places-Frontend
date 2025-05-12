@@ -1,8 +1,13 @@
 import React from "react";
 import CreateSubplaceButton from "./CreateSubplaceButton";
 import { fi } from "date-fns/locale";
+import { useNavigate } from "react-router-dom";
 
 const ListGroup = ({ section, first, subplaces, onRequireLogin }) => {
+  const navigate = useNavigate();
+  const handleNavigate = (id) => {
+    navigate(`/subplace/${id}`);
+  };
   return (
     <>
       <div
@@ -21,7 +26,11 @@ const ListGroup = ({ section, first, subplaces, onRequireLogin }) => {
           <div>
             {subplaces.map((subplace) => {
               return (
-                <div key={subplace._id} style={{ cursor: "pointer" }}>
+                <div
+                  key={subplace._id}
+                  style={{ cursor: "pointer" }}
+                  onClick={() => handleNavigate(subplace._id)}
+                >
                   <li
                     className="list-group-item text-white border-0 mb-1 custom-button d-flex align-items-center"
                     style={{ marginLeft: "0.1rem" }}

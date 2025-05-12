@@ -2,7 +2,8 @@ import React from "react";
 import PostBody from "./PostBody";
 
 const Post = ({
-  subplace,
+  subplaceName,
+  subplaceModerators,
   username,
   time,
   questiontitle,
@@ -17,6 +18,8 @@ const Post = ({
   edited,
   onRequestDelete,
   answerCount,
+  subplaceId,
+  trim,
 }) => {
   return (
     <>
@@ -37,7 +40,8 @@ const Post = ({
         }}
       >
         <PostBody
-          subplace={subplace}
+          subplaceName={subplaceName}
+          subplaceModerators={subplaceModerators}
           username={username}
           time={time}
           questiontitle={questiontitle}
@@ -52,6 +56,8 @@ const Post = ({
           edited={edited}
           onRequestDelete={onRequestDelete}
           answerCount={answerCount}
+          subplaceId={subplaceId}
+          trim={trim}
         />
       </div>
     </>

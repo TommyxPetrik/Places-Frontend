@@ -73,7 +73,7 @@ const NewsFeed = ({ cachedPosts, setCachedPosts }) => {
     if (location.pathname === "/") {
       refreshCachedPosts();
     }
-  }, [location.pathname]);
+  }, [location.pathname, token]);
 
   const fetchData = async (append = false) => {
     if (!append) setLoading(true);
@@ -277,7 +277,8 @@ const NewsFeed = ({ cachedPosts, setCachedPosts }) => {
           <Post
             key={post._id}
             postId={post._id}
-            subplace={post.subplace?.name}
+            subplaceName={post.subplace?.name}
+            subplaceId={post.subplace._id}
             username={post.userid?.name}
             time={formatDistanceToNow(new Date(post.createdAt), {
               addSuffix: true,
@@ -292,6 +293,7 @@ const NewsFeed = ({ cachedPosts, setCachedPosts }) => {
             onRequireLogin={openModal}
             edited={post.edited}
             answerCount={post.answerCount}
+            trim="nowrap"
           />
         ))
       )}

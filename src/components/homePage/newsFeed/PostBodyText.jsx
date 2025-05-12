@@ -4,7 +4,7 @@ import { useState } from "react";
 import { useAuth } from "../../context/AuthContext";
 
 const PostBodyText = ({
-  subplace,
+  subplaceName,
   username,
   time,
   questiontitle,
@@ -17,6 +17,8 @@ const PostBodyText = ({
   editedBody,
   setEditedTitle,
   setEditedBody,
+  subplaceId,
+  trim,
 }) => {
   const { user } = useAuth();
   const token = user?.token;
@@ -32,7 +34,9 @@ const PostBodyText = ({
           className="bi bi-geo-alt-fill"
           style={{ fontSize: "1rem", color: "cornflowerblue" }}
         ></i>
-        <h6 className="mb-0">{subplace}</h6>
+        <h6 className="mb-0" title={subplaceName}>
+          {subplaceName}
+        </h6>
         <span
           className="text-white opacity-50"
           style={{ marginLeft: "0.5rem", fontSize: "1rem" }}
@@ -41,7 +45,13 @@ const PostBodyText = ({
         </span>
         <span
           className="text-white opacity-50"
-          style={{ marginLeft: "0.5rem", fontSize: "0.8rem" }}
+          style={{
+            marginLeft: "0.5rem",
+            fontSize: "0.8rem",
+            whiteSpace: "nowrap",
+            overflow: "hidden",
+            textOverflow: "ellipsis",
+          }}
         >
           {time}
         </span>
@@ -55,12 +65,13 @@ const PostBodyText = ({
             </div>
           ) : null}
         </span>
-        <span
-          className="gap-2 d-flex align-items-center justify-content-start flex-grow-1"
+        <div
+          className="gap-2 d-flex align-items-center justify-content-start flex-grow-1 overflow-hidden"
           style={{ marginLeft: "1rem" }}
+          title={tags.join(", ")}
         >
-          <PostTags tags={tags} />
-        </span>
+          <PostTags tags={tags} maxTags={2} />
+        </div>
       </div>
       {isEditing ? (
         <>
@@ -82,13 +93,27 @@ const PostBodyText = ({
         <>
           <h5
             className="card-title text-start"
-            style={{ marginBottom: "0rem", fontSize: "1.2rem" }}
+            style={{
+              marginBottom: "0rem",
+              fontSize: "1.2rem",
+              overflow: "hidden",
+              whiteSpace: trim,
+              textOverflow: "ellipsis",
+            }}
+            title={questiontitle}
           >
             {questiontitle}
           </h5>
           <p
             className="card-text"
-            style={{ textAlign: "justify", marginTop: "0rem" }}
+            style={{
+              textAlign: "justify",
+              marginTop: "0.5rem",
+              overflow: "hidden",
+              whiteSpace: trim,
+              textOverflow: "ellipsis",
+            }}
+            title={questionbody}
           >
             {questionbody}
           </p>

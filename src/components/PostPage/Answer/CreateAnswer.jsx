@@ -85,9 +85,7 @@ const CreateAnswer = ({ onAnswerCreated, onRequireLogin }) => {
             color: "white",
           }}
         >
-          <div className="d-flex gap-3">
-            <ImageUploadButton />
-          </div>
+          <div className="d-flex gap-3">{/* <ImageUploadButton /> */}</div>
 
           <div className="d-flex gap-2">
             <CancelAnswerButton onClick={handleBlur} />

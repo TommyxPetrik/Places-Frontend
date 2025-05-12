@@ -15,6 +15,8 @@ import AllSubplacesFeed from "./pages/AllSubplacesFeed";
 import SubplacePage from "./pages/SubplacePage";
 import SubplaceInfoSidebar from "./components/SubplacePage/SubplaceInfoSidebar";
 import UserProfile from "./pages/ProfilePage";
+import AdminPanel from "./pages/AdminPanel";
+import ProtectedRouteAdmin from "./utils/ProtectedRouteAdmin";
 
 function App() {
   const [cachedPosts, setCachedPosts] = useState(null);
@@ -151,7 +153,23 @@ function App() {
             <div className="container mt-4" style={{ width: "1000px" }}>
               <div className="row justify-content-center">
                 <div className="col-lg-12">
-                  <UserProfile />
+                  <ProtectedRoute>
+                    <UserProfile />
+                  </ProtectedRoute>
+                </div>
+              </div>
+            </div>
+          ),
+        },
+        {
+          path: "admin",
+          element: (
+            <div className="container mt-4" style={{ width: "1000px" }}>
+              <div className="row justify-content-center">
+                <div className="col-lg-12">
+                  <ProtectedRouteAdmin>
+                    <AdminPanel />
+                  </ProtectedRouteAdmin>
                 </div>
               </div>
             </div>

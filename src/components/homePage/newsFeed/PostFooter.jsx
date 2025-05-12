@@ -10,6 +10,7 @@ import PostDeleteButton from "./PostDeleteButton";
 
 const PostFooter = ({
   upvotes,
+  subplaceModerators,
   postId,
   onPostUpdated,
   voteStatus,
@@ -47,6 +48,7 @@ const PostFooter = ({
           },
         }
       );
+
       const updatedPost = await response.json();
       onPostUpdated(updatedPost);
     } catch (error) {
@@ -78,7 +80,7 @@ const PostFooter = ({
 
   return (
     <>
-      <div className="card-footer bg-transparent border-0 p-0 mt-0">
+      <div className="card-footer bg-transparent border-0 p-0 mt-0 mb-3">
         <div className="d-flex justify-content-between align-items-center mt-2">
           <div className="d-flex gap-2">
             <PostUpvotes upvotes={upvotes} />
@@ -92,7 +94,9 @@ const PostFooter = ({
             />
             <PostCommentsButton postId={postId} answerCount={answerCount} />
             <PostShareButton postId={postId} />
-            {token && user?.id === userId ? (
+            {((token && user?.id === userId) ||
+              user?.role === "admin" ||
+              subplaceModerators?.includes(user?.id)) && (
               <>
                 <EditPostButton
                   onClick={handleEditClick}
@@ -100,7 +104,7 @@ const PostFooter = ({
                 />
                 <PostDeleteButton onClick={onRequestDelete} />
               </>
-            ) : null}
+            )}
           </div>
         </div>
       </div>

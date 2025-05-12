@@ -8,9 +8,9 @@ const AnswerTree = ({
   userVotes,
   onAnswerCreated,
   onRequireLogin,
-  userId,
   onAnswerUpdated,
   onRequestDelete,
+  subplaceModerators,
 }) => {
   const [voteStatus, setVoteStatus] = useState(null);
   if (!answer) {
@@ -36,6 +36,7 @@ const AnswerTree = ({
     <div className="mb-3 ms-3">
       <Answer
         key={answer._id}
+        answer={answer}
         answerId={answer._id}
         voteStatus={voteStatus}
         username={answer.username}
@@ -50,10 +51,10 @@ const AnswerTree = ({
         upvotes={answer.upvotes}
         onAnswerCreated={onAnswerCreated}
         onRequireLogin={onRequireLogin}
-        userId={userId}
         edited={answer.edited}
         onAnswerUpdated={onAnswerUpdated}
         onRequestDelete={onRequestDelete}
+        subplaceModerators={subplaceModerators}
       />
       {answer.children && answer.children.length > 0 && (
         <div className="ms-4 border-start ps-3">
@@ -64,9 +65,9 @@ const AnswerTree = ({
               onAnswerCreated={onAnswerCreated}
               userVotes={userVotes}
               onRequireLogin={onRequireLogin}
-              userId={userId}
               onAnswerUpdated={onAnswerUpdated}
               onRequestDelete={onRequestDelete}
+              subplaceModerators={subplaceModerators}
             />
           ))}
         </div>

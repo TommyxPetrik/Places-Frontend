@@ -28,12 +28,12 @@ const SignInPage = () => {
   };
 
   const handlePasswordBlur = () => {
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{10,}$/;
     if (!password) {
       setPasswordError("Password is required.");
     } else if (!passwordRegex.test(password)) {
       setPasswordError(
-        "Password must be at least 6 characters, include one uppercase letter and one number."
+        "Password must be at least 10 characters, include one uppercase letter and one number."
       );
     } else {
       setPasswordError("");
@@ -56,13 +56,13 @@ const SignInPage = () => {
       setEmailError("");
     }
 
-    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{6,}$/;
+    const passwordRegex = /^(?=.*[A-Z])(?=.*\d).{10,}$/;
     if (!password) {
       setPasswordError("Password is required.");
       isValid = false;
     } else if (!passwordRegex.test(password)) {
       setPasswordError(
-        "Password must be at least 6 characters, include one uppercase letter and one number."
+        "Password must be at least 10 characters, include one uppercase letter and one number."
       );
       isValid = false;
     } else {
@@ -82,7 +82,7 @@ const SignInPage = () => {
 
       if (!response.ok) {
         const errorData = await response.json();
-        alert("Login failed: " + (errorData.message || response.status));
+        alert("Login failed: " + (errorData.error || response.status));
         return;
       }
 
@@ -92,11 +92,12 @@ const SignInPage = () => {
         token: result.token,
         email: result.email,
         id: result.id,
+        role: result.role,
       });
 
       navigate("/");
     } catch (error) {
-      console.error("Login error:", error);
+      console.error("Login error:", error.message);
       alert("An error occurred during login.");
     }
   };

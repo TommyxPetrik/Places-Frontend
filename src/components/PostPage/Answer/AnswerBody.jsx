@@ -18,6 +18,7 @@ const AnswerBody = ({
   onAnswerUpdated,
   edited,
   onRequestDelete,
+  subplaceModerators,
 }) => {
   const { user } = useAuth();
   const token = user?.token;
@@ -79,6 +80,7 @@ const AnswerBody = ({
           userId={userId}
           isEditing={isEditing}
           onRequestDelete={onRequestDelete}
+          subplaceModerators={subplaceModerators}
         />
       </div>
     </div>

@@ -7,6 +7,9 @@ const RecentPostBody = ({
   time,
   onClick,
 }) => {
+  const truncateText = (text, maxLength) => {
+    return text.length > maxLength ? text.slice(0, maxLength) + "..." : text;
+  };
   return (
     <>
       <div onClick={onClick}>
@@ -16,7 +19,7 @@ const RecentPostBody = ({
             className="blockquote mb-0"
             style={{ fontSize: "1rem", padding: "0rem" }}
           >
-            <p>{questiontitle}</p>
+            <p>{truncateText(questiontitle, 30)}</p>
             <footer className="blockquote-footer">
               <cite title="Source Title">{username + " - " + time}</cite>
             </footer>
